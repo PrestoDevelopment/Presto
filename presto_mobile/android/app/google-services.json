@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "928419084723",
+    "project_id": "presto2",
+    "storage_bucket": "presto2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928419084723:android:f3810589df5fb0aa4773c6",
+        "android_client_info": {
+          "package_name": "com.example.presto2_0"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928419084723-1ggkaa5i132q8n9pstq20e27fllv5q09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhXzEwC5D2sfyrQZLpOsnTvlZktp00b2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928419084723-1ggkaa5i132q8n9pstq20e27fllv5q09.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
