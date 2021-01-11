@@ -89,13 +89,17 @@ class AuthenticationService {
     return user != null;
   }
 
-  Future signOut() async {
+  Future<bool> signOut() async {
     DialogResponse response = await _dialogService.showConfirmationDialog(
       title: "Sign Out",
       description: "Are you sure you want to sign out?",
       confirmationTitle: "Yes :(",
       cancelTitle: "No :)",
     );
-    if (response.confirmed) await _auth.signOut();
+    if (response.confirmed) {
+      await _auth.signOut();
+      return true;
+    }
+    return false;
   }
 }
