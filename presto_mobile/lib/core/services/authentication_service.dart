@@ -82,10 +82,10 @@ class AuthenticationService {
           if (e is PlatformException) return e.message;
           return e.toString();
         }
-        await _analyticsService.setUserProperties(
-          userId: cred.user.displayName,
-        );
-        return true;
+        // await _analyticsService.setUserProperties(
+        //   userId: cred.user.displayName,
+        // );
+        // return true;
       } else {
         //Set display name to referral code
         try {

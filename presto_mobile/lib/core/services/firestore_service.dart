@@ -72,4 +72,22 @@ class FireStoreService {
       return e.toString();
     }
   }
+
+  Future<Map> getBorrowingLimit() async {
+    try {
+      print("Getting borrowing Limits");
+      var limit = await _limitCollectionReference.doc('limits').get();
+      print("got borrowing limits");
+      return {
+        "borrowUpperLimit": limit?.data()["borrowUpperLimit"].toDouble(),
+        "borrowLowerLimit": limit?.data()["borrowLowerLimit"].toDouble(),
+      };
+    } catch (e) {
+      print(e.toString());
+      return {
+        "borrowUpperLimit": 1000.0,
+        "borrowLowerLimit": 100.0,
+      };
+    }
+  }
 }

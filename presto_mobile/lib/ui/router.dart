@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
 import 'package:presto_mobile/ui/views/login_view.dart';
+import 'package:presto_mobile/ui/views/main_view.dart';
 import 'package:presto_mobile/ui/views/signup_view.dart';
 
 Route<dynamic> customRoute(RouteSettings settings) {
@@ -10,6 +11,11 @@ Route<dynamic> customRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: HomeView(),
+      );
+    case MainPageViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: MainPageView(),
       );
     case LoginViewRoute:
       return _getPageRoute(

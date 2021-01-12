@@ -33,7 +33,7 @@ class StartUpModel extends BaseModel {
 
     if (hasLoggedInUser) {
       print("going home");
-      _navigationService.navigateTo(HomeViewRoute, true);
+      _navigationService.navigateTo(MainPageViewRoute, true);
     } else {
       print("going Login");
       _navigationService.navigateTo(LoginViewRoute, true);
