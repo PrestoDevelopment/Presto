@@ -4,14 +4,14 @@ import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:presto_mobile/ui/widgets/busybutton.dart';
 import 'package:presto_mobile/ui/widgets/datainput.dart';
 import 'package:presto_mobile/ui/widgets/passinput.dart';
-import 'package:provider_architecture/_viewmodel_provider.dart';
+import 'package:stacked/stacked.dart';
 
 class LoginView extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<LoginModel>.withConsumer(
+    return ViewModelBuilder<LoginModel>.reactive(
       viewModelBuilder: () => LoginModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: Colors.white,

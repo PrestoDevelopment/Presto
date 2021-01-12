@@ -1,4 +1,6 @@
 import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:presto_mobile/core/models/dialog_model.dart';
@@ -7,14 +9,13 @@ import 'package:presto_mobile/core/services/analytics_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
 import 'package:presto_mobile/locator.dart';
-import 'package:connectivity/connectivity.dart';
 
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Connectivity connectivity = Connectivity();
   final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
-  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final FireStoreService _fireStoreService = locator<FireStoreService>();
 
   StreamController<UserModel> userController =
       StreamController<UserModel>.broadcast();
@@ -29,14 +30,19 @@ class AuthenticationService {
         email: email,
         password: pass,
       );
-      if (authResult is String) return authResult;
-      return true;
+      var result;
+      if (authResult is String)
+        return authResult;
+      else if (authResult is UserCredential)
+        result = await _populateCurrentUser(authResult, true);
+      return result;
     } catch (e) {
+      print("Theres an error in logging In");
       return e;
     }
   }
 
-  Future signup(UserModel user, String pass) async {
+  Future signUp(UserModel user, String pass) async {
     try {
       _currentUser = user;
       print("Signing in");
@@ -44,8 +50,12 @@ class AuthenticationService {
         email: user.email,
         password: pass,
       );
-      await _firestoreService.parentDocUpdate(
-          user.referralCode, user.referredBy);
+      if (user.referredBy == "CM01") {
+        print("signing a community manager underling");
+        return await _populateCurrentUser(authResult, false);
+      } else
+        await _fireStoreService.parentDocUpdate(
+            user.referralCode, user.referredBy);
       return await _populateCurrentUser(authResult, false);
     } catch (e) {
       return e;
@@ -53,21 +63,24 @@ class AuthenticationService {
   }
 
   Future _populateCurrentUser(var cred, bool isLogIn) async {
-    print("populationg user");
+    print("populating user");
+    print(cred.runtimeType);
+    print(isLogIn);
     if (cred is FirebaseAuthException) return cred.message;
     if (cred is String) return cred;
-    if (cred != null && isLogIn) {
+    if (cred != null) {
       //return true after setting up user in database
       if (isLogIn) {
         try {
-          _currentUser = await _firestoreService.getUser(cred.user.displayName);
+          _currentUser = await _fireStoreService.getUser(cred.user.displayName);
           userController.add(_currentUser);
+          print("Completed populating user");
+          return true;
         } catch (e) {
-          if (e is PlatformException)
-            return _dialogService.showDialog(
-                title: "error", description: e.message);
-          return _dialogService.showDialog(
-              title: "error", description: e.toString());
+          print("theres an error here");
+          print(e.toString());
+          if (e is PlatformException) return e.message;
+          return e.toString();
         }
         await _analyticsService.setUserProperties(
           userId: cred.user.displayName,
@@ -75,9 +88,18 @@ class AuthenticationService {
         return true;
       } else {
         //Set display name to referral code
-        _auth.currentUser.updateProfile(displayName: _currentUser.referralCode);
-        userController.add(_currentUser);
-        await _firestoreService.createUser(_currentUser);
+        try {
+          print(
+              "Updating user display name and then creating user database entry");
+          _auth.currentUser
+              .updateProfile(displayName: _currentUser.referralCode);
+          userController.add(_currentUser);
+          await _fireStoreService.createUser(_currentUser);
+          return true;
+        } catch (e) {
+          if (e is PlatformException) return e.message;
+          return e.toString();
+        }
       }
     } else
       return false;

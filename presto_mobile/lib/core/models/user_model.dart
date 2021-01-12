@@ -51,7 +51,7 @@ class UserModel {
         personalScore = null,
         notificationToken = null;
 
-  UserModel.fromJson(Map<dynamic, dynamic> json)
+  UserModel.fromJson(Map<String, dynamic> json)
       : name = json['name'] ?? "",
         email = json['email'] ?? "",
         contact = json['contact'] ?? "",
@@ -67,7 +67,7 @@ class UserModel {
         userLocation = json['userLocation'] ?? null,
         notificationToken = json['notificationToken'] ?? "";
 
-  Map<dynamic, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'name': name,
         'email': email,
         'contact': contact,

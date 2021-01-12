@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -15,15 +16,23 @@ class SignUpModel extends BaseModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();
-  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final FireStoreService _firestoreService = locator<FireStoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
   String newReferralCode;
-  String errorMessage = "";
   String deviceId;
   bool gotDeviceId = false;
   //String fcmToken;
   //bool gotFcmToken = false;
+  //Errors
+  String emailError;
+  String nameError;
+  String contactError;
+  String passError;
+  String referralCodeError;
+  String generalError;
+  String deviceIdError;
+
   Future signup(
     String email,
     String pass,
@@ -33,12 +42,13 @@ class SignUpModel extends BaseModel {
   ) async {
     setBusy(true);
     // Validate all the fields
+
     newReferralCode =
         name.substring(0, 3) + Random().nextInt(999999).toString();
-    var emailValidation = emailValidator(email);
-    var nameValidation = nameValidator(name);
-    var contactValidation = contactValidator(contact);
-    var passValidation = passValidator(pass);
+    var emailValidation = await emailValidator(email);
+    var nameValidation = await nameValidator(name);
+    var contactValidation = await contactValidator(contact);
+    var passValidation = await passValidator(pass);
     var referralCodeValidation =
         await parentReferralCodeValidator(parentReferralCode);
     print("Validated Data");
@@ -50,8 +60,7 @@ class SignUpModel extends BaseModel {
         contactValidation &&
         gotDeviceId) {
       //Begin SignUp
-      //TODO: write a random code generator
-      var result = await _authenticationService.signup(
+      var result = await _authenticationService.signUp(
         UserModel(
           contact: contact,
           email: email,
@@ -69,7 +78,7 @@ class SignUpModel extends BaseModel {
       );
 
       setBusy(false);
-      //Complete SignUp by showing error or foing to different page;
+      //Complete SignUp by showing error or going to different page;
       if (result is bool) {
         if (result)
           _navigationService.navigateTo(HomeViewRoute, true);
@@ -84,79 +93,89 @@ class SignUpModel extends BaseModel {
         print("error");
         if (result is FirebaseAuthException) {
           print("exceeptiom");
-          await _dialogService.showDialog(
-            title: "Error",
-            description: result.message.toString(),
-          );
+          generalError = result.message;
         } else {
-          await _dialogService.showDialog(
-            title: "Error",
-            description: result.toString(),
-          );
+          generalError = result.toString();
         }
       }
     }
-    _dialogService.showDialog(title: 'Error', description: errorMessage);
     setBusy(false);
+    _dialogService.showDialog(
+        title: 'Error',
+        description: emailError +
+            "\n" +
+            passError +
+            "\n" +
+            nameError +
+            "\n" +
+            contactError +
+            "\n" +
+            referralCodeError +
+            "\n" +
+            deviceIdError +
+            "\n" +
+            generalError);
   }
 
   Future<void> getDeviceId() async {
     try {
+      print("Getting Device Id");
       deviceId = await PlatformDeviceId.getDeviceId;
       gotDeviceId = true;
       //var notificationToken = await _fcm.getToken();
+      print("Got Device Id");
     } catch (e) {
       if (e is PlatformException)
-        errorMessage += e.message + '\n';
+        deviceIdError = e.message;
       else
-        errorMessage +=
+        deviceIdError =
             'Failed to get deviceId. \nFailed to get notificationId.\n';
     }
   }
 
-  bool emailValidator(String value) {
+  Future<bool> emailValidator(String value) async {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value.trim())) {
-      errorMessage += 'Enter Valid Email\n';
+      emailError = 'Enter Valid Email';
       return false;
     }
     return true;
   }
 
-  bool passValidator(String value) {
+  Future<bool> passValidator(String value) async {
     print("Pwd Validation started");
     if (value.length < 6) {
-      errorMessage += 'Password must be longer than 6 characters';
+      passError = 'Password must be longer than 6 characters';
       return false;
     }
     print("Pwd Validation Completed");
     return true;
   }
 
-  bool contactValidator(String value) {
+  Future<bool> contactValidator(String value) async {
     print("Contact Validation started");
     if (value.isEmpty) {
-      errorMessage += 'Contact can\'t be empty\n';
+      contactError = 'Contact can\'t be empty';
       return false;
     }
     if (value.length < 10 || value.length > 10) {
-      errorMessage += 'Enter a valid contact number\n';
+      contactError = 'Enter a valid contact number';
       return false;
     }
     print("Contact Validation Completed");
     return true;
   }
 
-  bool nameValidator(String value) {
+  Future<bool> nameValidator(String value) async {
     print("Name Validation started");
     if (value.isEmpty) {
-      errorMessage += 'Username can\'t be empty\n';
+      nameError = 'Username can\'t be empty';
       return false;
     }
     if (value.length < 3) {
-      errorMessage += 'Enter a valid username \n';
+      nameError = 'Enter a valid username ';
       return false;
     }
 
@@ -166,18 +185,22 @@ class SignUpModel extends BaseModel {
 
   Future<bool> parentReferralCodeValidator(String value) async {
     if (value == null) {
-      errorMessage += 'Referral code cannot be empty\n';
+      referralCodeError = 'Referral code cannot be empty';
       return false;
     }
-    var result = await _firestoreService.docExists(value);
-    if ((result is bool && result) || value == 'CM01')
+    if (value == "CM01")
       return true;
     else {
-      if (result is PlatformException)
-        errorMessage = errorMessage + result.message.toString() + '\n';
-      else
-        errorMessage = errorMessage + result.toString() + '\n';
-      return false;
+      var result = await _firestoreService.docExists(value);
+      if ((result is bool && result) || value == 'CM01')
+        return true;
+      else {
+        if (result is PlatformException)
+          referralCodeError = result.message.toString();
+        else
+          referralCodeError = result.toString();
+        return false;
+      }
     }
   }
 

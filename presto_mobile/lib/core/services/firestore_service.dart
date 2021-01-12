@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 
-class FirestoreService {
+// ignore: camel_case_types
+class FireStoreService {
   final CollectionReference _userCollectionReference =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _limitCollectionReference =
@@ -11,11 +12,18 @@ class FirestoreService {
   Future createUser(UserModel userModel) async {
     try {
       print("creating User document in database");
+      print(userModel.toJson());
       await _userCollectionReference
           .doc(userModel.referralCode)
           .set(userModel.toJson());
+      print("New User Document created in Database");
     } catch (e) {
-      return e.message;
+      print("Getting error here!!!!!!!!!! plsss someone watch");
+      print(e.toString());
+      if (e is PlatformException)
+        return e.message;
+      else
+        return e.toString();
     }
   }
 
@@ -24,13 +32,15 @@ class FirestoreService {
     try {
       var result = await _userCollectionReference.doc(code).get();
       var limits = await _limitCollectionReference.doc('limits').get();
-      if (result == null) {
+      if (result == null || limits == null) {
         return false;
       } else {
         //implement changes here
         UserModel parent = UserModel.fromJson(result?.data());
-        if (parent.referredTo.length > limits.data()['refereeLimit'])
+        if (parent.referredTo.length > limits.data()['refereeLimit']) {
+          print("error in checking limit");
           return "Referee limit reached";
+        }
         return true;
       }
     } catch (e) {
@@ -41,7 +51,9 @@ class FirestoreService {
 
   Future parentDocUpdate(String code, String child) async {
     var result = await _userCollectionReference.doc(code).get();
+    print("Getting parent Document");
     UserModel parent = UserModel.fromJson(result?.data());
+    print("Got parent Document : Parent Name : ${parent.name}");
     parent.referredTo.add(child);
     _userCollectionReference.doc(code).update(parent.toJson());
   }

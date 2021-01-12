@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/home_model.dart';
 import 'package:presto_mobile/ui/widgets/busybutton.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -11,8 +11,9 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<HomeModel>.withConsumer(
+    return ViewModelBuilder<HomeModel>.reactive(
         viewModelBuilder: () => HomeModel(),
+        onModelReady: (model) => model.onReady(),
         builder: (context, model, child) => Scaffold(
               body: Center(
                 child: Column(

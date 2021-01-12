@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/services/analytics_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
@@ -7,7 +7,6 @@ import 'package:presto_mobile/locator.dart';
 import 'package:presto_mobile/managers/dialog_manager.dart';
 import 'package:presto_mobile/ui/router.dart';
 import 'package:presto_mobile/ui/views/startup_view.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

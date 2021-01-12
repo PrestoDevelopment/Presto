@@ -4,7 +4,7 @@ import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:presto_mobile/ui/widgets/busybutton.dart';
 import 'package:presto_mobile/ui/widgets/datainput.dart';
 import 'package:presto_mobile/ui/widgets/passinput.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 
 class SignUpView extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -15,7 +15,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<SignUpModel>.withConsumer(
+    return ViewModelBuilder<SignUpModel>.reactive(
       viewModelBuilder: () => SignUpModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: Colors.white,
