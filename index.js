@@ -95,11 +95,17 @@ app.post("/firebase/notification/", (req, res) => {
 app.post("/creditScoring/:userId", (req, res) => {
   const id = req.params.userId;
   var currentUserId = id;
-  var i = userData["level"];
-  while (i <= 1) {
-    const userData = db.collection("users").get(currentUserId);
-    userData["creditScore"] -= 0.05;
-    currentUserId = userData["id"];
+  var i = 1;
+  while (i <= 5) {
+    const userData = db.collection("users").doc(currentUserId).get();
+    var score = userData.data()["creditScore"];
+    score -= i * 0.05;
+    db.collection("users").doc(currentUserId).update({
+      "creditScore": score
+    }).then(() => {
+      currentUserId = userData.data()["id"];
+      i = i + 1;
+    });
   }
 });
 
