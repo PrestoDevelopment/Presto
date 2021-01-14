@@ -5,23 +5,29 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
-import 'package:presto_mobile/core/services/analytics_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
 import 'package:presto_mobile/locator.dart';
 
+import '../models/user_model.dart';
+
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Connectivity connectivity = Connectivity();
-  final AnalyticsService _analyticsService = locator<AnalyticsService>();
+
+  // final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
   final FireStoreService _fireStoreService = locator<FireStoreService>();
 
-  StreamController<UserModel> userController =
-      StreamController<UserModel>.broadcast();
   UserModel _currentUser;
+
   UserModel get currentUser => _currentUser;
+
   //LogIn  Part
+
+  String retrieveCode() {
+    return _auth.currentUser.displayName;
+  }
 
   Future login(String email, String pass) async {
     print("Logging in");
@@ -73,7 +79,7 @@ class AuthenticationService {
       if (isLogIn) {
         try {
           _currentUser = await _fireStoreService.getUser(cred.user.displayName);
-          userController.add(_currentUser);
+          // userController.add(_currentUser);
           print("Completed populating user");
           return true;
         } catch (e) {
@@ -93,7 +99,7 @@ class AuthenticationService {
               "Updating user display name and then creating user database entry");
           _auth.currentUser
               .updateProfile(displayName: _currentUser.referralCode);
-          userController.add(_currentUser);
+          //userController.add(_currentUser);
           await _fireStoreService.createUser(_currentUser);
           return true;
         } catch (e) {
@@ -108,6 +114,13 @@ class AuthenticationService {
   Future<bool> isUserLoggedIn() async {
     print("Checking whether user is logged in");
     var user = _auth.currentUser;
+    if (user != null) {
+      var temp = await _fireStoreService.getUser(user.displayName);
+      if (temp is UserModel) {
+        // userController.add(temp);
+        _currentUser = temp;
+      }
+    }
     return user != null;
   }
 

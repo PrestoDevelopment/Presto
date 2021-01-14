@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/transactions_model.dart';
-import 'package:stacked/stacked.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:presto_mobile/ui/resources/Colors.dart' as color;
+import 'package:stacked/stacked.dart';
 
 class TransactionsView extends StatefulWidget {
   @override
@@ -17,7 +16,7 @@ class _TransactionsViewState extends State<TransactionsView> {
 
     return ViewModelBuilder<TransactionsModel>.reactive(
       viewModelBuilder: () => TransactionsModel(),
-      onModelReady: (model) => model.onReady(height, width),
+      onModelReady: (model) => model.onReady(height, width, context),
       builder: (context, model, child) => model.busy
           ? Center(
               child: Container(

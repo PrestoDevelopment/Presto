@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
-import 'package:presto_mobile/core/services/navigation_service.dart';
+import 'package:presto_mobile/core/services/firestore_service.dart';
 import 'package:presto_mobile/core/viewmodels/base_model.dart';
 import 'package:presto_mobile/locator.dart';
 import 'package:presto_mobile/ui/widgets/transactionCards.dart';
@@ -10,17 +10,26 @@ import 'package:presto_mobile/ui/widgets/transactionCards.dart';
 class TransactionsModel extends BaseModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
-  final NavigationService _navigationService = locator<NavigationService>();
+
+  // final NavigationService _navigationService = locator<NavigationService>();
+
+  // final SharedPreferencesService _preferencesService =
+  //     SharedPreferencesService();
+  final FireStoreService _fireStoreService = locator<FireStoreService>();
+
   var _height;
   var _width;
   UserModel _user;
+
   get user => _user;
 
-  void onReady(var height, var width) {
+  void onReady(var height, var width, BuildContext context) async {
     setBusy(true);
-    _authenticationService.userController.stream.listen((value) {
-      _user = value;
-    });
+    var temp =
+        await _fireStoreService.getUser(_authenticationService.retrieveCode());
+    if (temp is UserModel) {
+      _user = temp;
+    }
     if (_user != null) {
       setBusy(false);
     }

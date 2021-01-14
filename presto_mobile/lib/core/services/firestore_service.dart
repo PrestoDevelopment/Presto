@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 
+import '../models/user_model.dart';
+
 // ignore: camel_case_types
 class FireStoreService {
   final CollectionReference _userCollectionReference =
@@ -9,6 +11,8 @@ class FireStoreService {
   final CollectionReference _limitCollectionReference =
       FirebaseFirestore.instance.collection('limits');
 
+  // final SharedPreferencesService _sharedPreferencesService =
+  //     SharedPreferencesService();
   Future createUser(UserModel userModel) async {
     try {
       print("creating User document in database");
@@ -16,7 +20,10 @@ class FireStoreService {
       await _userCollectionReference
           .doc(userModel.referralCode)
           .set(userModel.toJson());
-      print("New User Document created in Database");
+
+      // await _sharedPreferencesService.synUserData(userModel.toJson());
+      print(
+          "New User Document created in Database and saved in Shared Preferences");
     } catch (e) {
       print("Getting error here!!!!!!!!!! plsss someone watch");
       print(e.toString());
@@ -62,11 +69,19 @@ class FireStoreService {
     try {
       print("getting Data about user");
       var data = await _userCollectionReference.doc(code).get();
-      if (data.exists) return UserModel.fromJson(data.data());
-      return PlatformException(
-        message: "User Dont Exist",
-        code: null,
-      );
+      if (data.exists) {
+        return UserModel.fromJson(data.data());
+        // var user = await _sharedPreferencesService.synUserData(data.data());
+        // if (user is UserModel)
+        //   return user;
+        // else
+        //   throw PlatformException(
+        //       code: 'Error', message: "Some Difficulties in retrieving data");
+      } else
+        return PlatformException(
+          message: "User Dont Exist",
+          code: null,
+        );
     } catch (e) {
       if (e is PlatformException) return e.message;
       return e.toString();

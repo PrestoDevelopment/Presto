@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/home_model.dart';
+import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:presto_mobile/ui/widgets/amountButton.dart';
 import 'package:presto_mobile/ui/widgets/busybutton.dart';
-import 'package:stacked/stacked.dart';
-import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:stacked/stacked.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -16,15 +16,17 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-
     return ViewModelBuilder<HomeModel>.reactive(
       viewModelBuilder: () => HomeModel(),
-      onModelReady: (model) => model.onReady(),
+      onModelReady: (model) => model.onReady(context),
       builder: (context, model, child) => model.busy
-          ? Center(
-              child: Container(
-                child: FadingText(
-                  'Loading Home page...',
+          ? Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                child: Container(
+                  child: FadingText(
+                    'Loading Home page...',
+                  ),
                 ),
               ),
             )
@@ -36,6 +38,11 @@ class _HomeViewState extends State<HomeView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          Container(
+                            child: FadingText(
+                              model.user?.name ?? "Error",
+                            ),
+                          ),
                           Container(
                             width: width,
                             height: height / 3.7,
@@ -76,7 +83,9 @@ class _HomeViewState extends State<HomeView> {
                           SizedBox(height: height / 40),
                           Padding(
                             padding: EdgeInsets.only(
-                                right: width / 8.7, left: height / 8.7),
+                              right: width / 8.7,
+                              left: width / 8.7,
+                            ),
                             child: Row(
                               children: <Widget>[
                                 AmountButton(
@@ -96,7 +105,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                right: width / 8.7, left: height / 8.7),
+                                right: width / 8.7, left: width / 8.7),
                             child: Row(
                               children: <Widget>[
                                 AmountButton(

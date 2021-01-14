@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/main_model.dart';
-import 'package:stacked/stacked.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:stacked/stacked.dart';
 
 class MainPageView extends StatefulWidget {
   @override
@@ -10,6 +10,8 @@ class MainPageView extends StatefulWidget {
 }
 
 class _MainPageViewState extends State<MainPageView> {
+  // final AuthenticationService _authenticationService = AuthenticationService();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainPageModel>.reactive(

@@ -8,6 +8,7 @@ class UserModel {
   bool contactVerified;
   String referredBy;
   List<dynamic> referredTo;
+
   //Will Contain list of referral Codes of individuals whom he/she referred to.
   String referralCode;
   String deviceId;
@@ -16,6 +17,9 @@ class UserModel {
   String personalScore;
   String communityScore;
   String notificationToken;
+  int totalBorrowed;
+  int totalLent;
+
   //Add transactions Lists
 
   UserModel({
@@ -33,6 +37,8 @@ class UserModel {
     this.communityScore,
     this.personalScore,
     this.notificationToken,
+    this.totalBorrowed,
+    this.totalLent,
   });
 
   UserModel.initial()
@@ -49,6 +55,8 @@ class UserModel {
         userLocation = null,
         communityScore = null,
         personalScore = null,
+        totalBorrowed = 0,
+        totalLent = 0,
         notificationToken = null;
 
   UserModel.fromJson(Map<String, dynamic> json)
@@ -65,6 +73,8 @@ class UserModel {
         personalScore = json['personalScore'] ?? "",
         communityScore = json['communityScore'] ?? "",
         userLocation = json['userLocation'] ?? null,
+        totalBorrowed = json['totalBorrowed'] ?? 0,
+        totalLent = json['totalLent'] ?? 0,
         notificationToken = json['notificationToken'] ?? "";
 
   Map<String, dynamic> toJson() => {
@@ -81,6 +91,50 @@ class UserModel {
         'communityScore': communityScore,
         'transactionIds': transactionIds,
         'userLocation': userLocation,
-        'notificationToken': notificationToken
+        'notificationToken': notificationToken,
+        'totalLent': totalLent,
+        'totalBorrowed': totalBorrowed,
       };
+
+  @override
+  bool operator ==(Object other) =>
+      other is UserModel &&
+      other.name == name &&
+      other.email == email &&
+      other.contact == contact &&
+      other.deviceId == deviceId &&
+      other.referralCode == referralCode &&
+      other.referredBy == referredBy &&
+      other.referredTo == referredTo &&
+      other.emailVerified == emailVerified &&
+      other.contactVerified == contactVerified &&
+      other.personalScore == personalScore &&
+      other.communityScore == communityScore &&
+      other.transactionIds == transactionIds &&
+      other.userLocation == userLocation &&
+      other.totalLent == totalLent &&
+      other.totalBorrowed == totalBorrowed &&
+      other.notificationToken == notificationToken;
+
+  @override
+  int get hashCode {
+    int result = 17;
+    result = result * 19 + name.hashCode;
+    result = result * 19 + email.hashCode;
+    result = result * 19 + contact.hashCode;
+    result = result * 19 + deviceId.hashCode;
+    result = result * 19 + referralCode.hashCode;
+    result = result * 19 + referredTo.hashCode;
+    result = result * 19 + referredBy.hashCode;
+    result = result * 19 + emailVerified.hashCode;
+    result = result * 19 + contactVerified.hashCode;
+    result = result * 19 + personalScore.hashCode;
+    result = result * 19 + communityScore.hashCode;
+    result = result * 19 + transactionIds.hashCode;
+    result = result * 19 + userLocation.hashCode;
+    result = result * 19 + notificationToken.hashCode;
+    result = result * 19 + totalBorrowed.hashCode;
+    result = result * 19 + totalLent.hashCode;
+    return result;
+  }
 }

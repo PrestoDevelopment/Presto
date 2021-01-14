@@ -1,42 +1,50 @@
-import 'package:presto_mobile/constants/route_names.dart';
-import 'package:presto_mobile/core/models/user_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
-import 'package:presto_mobile/core/services/firestore_service.dart';
-import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
+import 'package:presto_mobile/core/services/firestore_service.dart';
 import 'package:presto_mobile/core/viewmodels/base_model.dart';
 import 'package:presto_mobile/locator.dart';
+
+import '../models/user_model.dart';
 
 class HomeModel extends BaseModel {
   final AuthenticationService _authenticationService = AuthenticationService();
   final DialogService _dialogService = locator<DialogService>();
-  final NavigationService _navigationService = locator<NavigationService>();
+
+  // final NavigationService _navigationService = locator<NavigationService>();
   final FireStoreService _fireStoreService = locator<FireStoreService>();
 
-  double amount;
-  Map borrowingLimits;
+  // final SharedPreferencesService _preferencesService =
+  //     SharedPreferencesService();
+  double _amount;
+  Map _borrowingLimits;
 
-  void onReady() async {
+  get amount => _amount;
+
+  get borrowingLimits => _borrowingLimits;
+  UserModel _user;
+
+  get user => _user;
+
+  void onReady(BuildContext context) async {
     setBusy(true);
-    _authenticationService.userController.stream.listen((event) {
-      if (event is UserModel) {
-        print("-------------------------------------------------");
-        print(event.name);
-      }
-    });
+    var temp =
+        await _fireStoreService.getUser(_authenticationService.retrieveCode());
+    if (temp is UserModel) {
+      _user = temp;
+    }
     await _fireStoreService.getBorrowingLimit().then((value) {
-      borrowingLimits = value;
-      amount = borrowingLimits["borrowLowerLimit"];
+      _borrowingLimits = value;
+      _amount = _borrowingLimits["borrowLowerLimit"];
     });
-
     setBusy(false);
   }
 
   void increaseAmount(double value) {
-    print(borrowingLimits);
+    print(_borrowingLimits);
     setBusy(true);
-    if (amount + value <= borrowingLimits["borrowUpperLimit"]) {
-      amount = amount + value;
+    if (_amount + value <= _borrowingLimits["borrowUpperLimit"]) {
+      _amount = _amount + value;
       setBusy(false);
     } else {
       setBusy(false);
@@ -49,8 +57,8 @@ class HomeModel extends BaseModel {
 
   void decreaseAmount(double value) {
     setBusy(true);
-    if (amount - value >= borrowingLimits["borrowLowerLimit"]) {
-      amount = amount - value;
+    if (_amount - value >= _borrowingLimits["borrowLowerLimit"]) {
+      _amount = _amount - value;
       setBusy(false);
     } else {
       setBusy(false);
@@ -63,7 +71,7 @@ class HomeModel extends BaseModel {
 
   void setAmount(double value) {
     setBusy(true);
-    amount = value;
+    _amount = value;
     setBusy(false);
   }
 }
