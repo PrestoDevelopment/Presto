@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
@@ -9,7 +11,7 @@ class FireStoreService {
   final CollectionReference _userCollectionReference =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _limitCollectionReference =
-      FirebaseFirestore.instance.collection('limits');
+  FirebaseFirestore.instance.collection('limits');
 
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
@@ -44,7 +46,9 @@ class FireStoreService {
       } else {
         //implement changes here
         UserModel parent = UserModel.fromJson(result?.data());
-        if (parent.referredTo.length > limits.data()['refereeLimit']) {
+        var parentDoc = parent.referredTo?.length;
+        int limitOfReferee = limits.data()['refereeLimit'];
+        if (parentDoc is int && parentDoc > limitOfReferee) {
           print("error in checking limit");
           return "Referee limit reached";
         }
@@ -59,10 +63,25 @@ class FireStoreService {
   Future parentDocUpdate(String code, String child) async {
     var result = await _userCollectionReference.doc(code).get();
     print("Getting parent Document");
-    UserModel parent = UserModel.fromJson(result?.data());
-    print("Got parent Document : Parent Name : ${parent.name}");
-    parent.referredTo.add(child);
-    _userCollectionReference.doc(code).update(parent.toJson());
+    try {
+      if (result.exists) {
+        UserModel parent = UserModel.fromJson(result.data());
+        print("Got parent Document : Parent Name : ${parent?.name}");
+        parent.referredTo.add(child);
+        _userCollectionReference.doc(code).update(parent.toJson());
+        return true;
+      }
+    } catch (e) {
+      if (e is PlatformException) {
+        print("@@@@@@@@@@@@@@@@@@@");
+        print(e.message);
+        return e.message;
+      } else {
+        print("--------------------------");
+        print(e.toString());
+        return e.toString();
+      }
+    }
   }
 
   Future getUser(String code) async {
@@ -71,15 +90,9 @@ class FireStoreService {
       var data = await _userCollectionReference.doc(code).get();
       if (data.exists) {
         return UserModel.fromJson(data.data());
-        // var user = await _sharedPreferencesService.synUserData(data.data());
-        // if (user is UserModel)
-        //   return user;
-        // else
-        //   throw PlatformException(
-        //       code: 'Error', message: "Some Difficulties in retrieving data");
       } else
         return PlatformException(
-          message: "User Dont Exist",
+          message: "User d\'ont Exist",
           code: null,
         );
     } catch (e) {
@@ -88,7 +101,7 @@ class FireStoreService {
     }
   }
 
-  Future<Map> getBorrowingLimit() async {
+  Future<Map<String, dynamic>> getBorrowingLimit() async {
     try {
       print("Getting borrowing Limits");
       var limit = await _limitCollectionReference.doc('limits').get();
@@ -104,5 +117,28 @@ class FireStoreService {
         "borrowLowerLimit": 100.0,
       };
     }
+  }
+
+  StreamController<UserModel> _userStream =
+      StreamController<UserModel>.broadcast();
+  StreamController _userLimits = StreamController.broadcast();
+
+  //Streams getter functions
+  Stream listenToUserDocumentRealTime(String code) {
+    _userCollectionReference.doc(code).snapshots().listen((snap) {
+      if (snap.exists) {
+        _userStream.add(UserModel.fromJson(snap.data()));
+      }
+    });
+    return _userStream.stream;
+  }
+
+  Stream listenToUserLimitsRealTime() {
+    _limitCollectionReference.doc('limits').snapshots().listen((snap) {
+      if (snap.exists) {
+        _userLimits.add(snap.data());
+      }
+      return _userLimits.stream;
+    });
   }
 }

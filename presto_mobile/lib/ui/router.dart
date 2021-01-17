@@ -5,12 +5,20 @@ import 'package:presto_mobile/ui/views/login_view.dart';
 import 'package:presto_mobile/ui/views/main_view.dart';
 import 'package:presto_mobile/ui/views/signup_view.dart';
 
+import '../constants/route_names.dart';
+import 'views/startup_view.dart';
+
 Route<dynamic> customRoute(RouteSettings settings) {
   switch (settings.name) {
     case HomeViewRoute:
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: HomeView(),
+      );
+    case StartUpViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: StartUpView(),
       );
     case MainPageViewRoute:
       return _getPageRoute(

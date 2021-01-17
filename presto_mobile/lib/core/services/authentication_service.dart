@@ -17,7 +17,7 @@ class AuthenticationService {
 
   // final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
-  final FireStoreService _fireStoreService = locator<FireStoreService>();
+  final FireStoreService _fireStoreService = FireStoreService();
 
   UserModel _currentUser;
 
@@ -61,7 +61,7 @@ class AuthenticationService {
         return await _populateCurrentUser(authResult, false);
       } else
         await _fireStoreService.parentDocUpdate(
-            user.referralCode, user.referredBy);
+            user.referredBy, user.referralCode);
       return await _populateCurrentUser(authResult, false);
     } catch (e) {
       return e;

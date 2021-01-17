@@ -128,7 +128,7 @@ class SignUpView extends StatelessWidget {
                         busy: model.busy,
                         onPressed: () {
                           print("initiating signUP");
-                          model.signup(
+                          model.signUp(
                             emailController.text.trim(),
                             passwordController.text.trim(),
                             nameController.text.trim(),

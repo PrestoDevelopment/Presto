@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
+import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/core/viewmodels/base_model.dart';
 import 'package:presto_mobile/locator.dart';
-import 'package:presto_mobile/core/services/navigation_service.dart';
+
+import '../../constants/route_names.dart';
 
 class LoginModel extends BaseModel {
   final AuthenticationService _authenticationService =
@@ -18,11 +20,11 @@ class LoginModel extends BaseModel {
     // Validate the fields
     var result = await _authenticationService.login(email, pass);
     setBusy(false);
-    //Complete LogIn by showing error or foing to different page;
+    //Complete LogIn by showing error or doing to different page;
 
     if (result is bool) {
       if (result)
-        _navigationService.navigateTo(HomeViewRoute, true);
+        _navigationService.navigateTo(MainPageViewRoute, true);
       else {
         await _dialogService.showDialog(
           title: "Error",

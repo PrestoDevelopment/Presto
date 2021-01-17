@@ -17,9 +17,9 @@ class _ProfileViewState extends State<ProfileView> {
     var height = MediaQuery.of(context).size.height;
     return ViewModelBuilder<ProfileModel>.reactive(
         viewModelBuilder: () => ProfileModel(),
-        onModelReady: (model) => model.onReady(context),
+        onModelReady: (model) => model.onReady(),
         builder: (context, model, child) {
-          return model.busy
+          return !model.hasUserData
               ? Center(
                   child: Container(
                     child: FadingText(

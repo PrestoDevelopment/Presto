@@ -15,7 +15,7 @@ class TransactionsModel extends BaseModel {
 
   // final SharedPreferencesService _preferencesService =
   //     SharedPreferencesService();
-  final FireStoreService _fireStoreService = locator<FireStoreService>();
+  final FireStoreService _fireStoreService = FireStoreService();
 
   var _height;
   var _width;
@@ -23,19 +23,36 @@ class TransactionsModel extends BaseModel {
 
   get user => _user;
 
-  void onReady(var height, var width, BuildContext context) async {
+  void onReady(var height, var width) async {
+    print("Getting user in Transactions view !!!!!!!!!!!!!");
     setBusy(true);
-    var temp =
-        await _fireStoreService.getUser(_authenticationService.retrieveCode());
-    if (temp is UserModel) {
-      _user = temp;
-    }
-    if (_user != null) {
-      setBusy(false);
-    }
+    // var temp =
+    //     await _fireStoreService.getUser(_authenticationService.retrieveCode());
+    // if (temp is UserModel) {
+    //   _user = temp;
+    //   print("Got user in Transaction View!!");
+    //   notifyListeners();
+    // }
+    // if (_user != null) {
+    //   setBusy(false);
+    // }
+    listenToDatabase();
     _height = height;
     _width = width;
     print("Done initialising transactions model");
+  }
+
+  void listenToDatabase() {
+    setBusy(true);
+    _fireStoreService
+        .listenToUserDocumentRealTime(_authenticationService.retrieveCode())
+        .listen((updateUser) {
+      if (updateUser != null) {
+        _user = updateUser;
+        notifyListeners();
+      }
+    });
+    setBusy(false);
   }
 
   List<String> name = [
