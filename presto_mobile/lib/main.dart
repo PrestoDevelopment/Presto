@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xff19c7c1),
         textTheme: Theme.of(context).textTheme.apply(
-              fontFamily: 'Open Sans',
+              fontFamily: 'Oswald',
             ),
       ),
       home: StartUpView(),
