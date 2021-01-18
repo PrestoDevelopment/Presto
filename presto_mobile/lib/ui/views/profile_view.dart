@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/profile_model.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
+import 'package:presto_mobile/ui/widgets/SideNavDrawer.dart';
 import 'package:presto_mobile/ui/widgets/listToken.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
@@ -11,6 +12,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -32,7 +34,18 @@ class _ProfileViewState extends State<ProfileView> {
                 )
               : SafeArea(
                   child: Scaffold(
+                    key: scaffoldKey,
                     backgroundColor: Colors.white,
+                    drawer: Container(
+                      color: Colors.white,
+                      child: SideNavDrawer(
+                        verificationColor: model.user.emailVerified ? Colors.green : Colors.red,
+                        logoutTap: (){
+                          //Sign Out
+                          model.signOut();
+                          },
+                      ),
+                    ),
                     body: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
@@ -57,8 +70,16 @@ class _ProfileViewState extends State<ProfileView> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
+                                        padding: const EdgeInsets.only(left: 14.0),
+                                        child: IconButton(
+                                          color: Colors.white,
+                                            icon: Icon(Icons.menu),
+                                            onPressed: () => scaffoldKey.currentState.openDrawer(),
+                                        ),
+                                      ),
+                                      Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 14.0, left: 14.0, bottom: 5.0),
+                                            top: 5.0, left: 14.0, bottom: 5.0),
                                         child: Container(
                                           //height: MediaQuery.of(context).size.height/17,
                                           width: width / 1.6,
@@ -92,27 +113,6 @@ class _ProfileViewState extends State<ProfileView> {
                                             child: Icon(
                                               Icons.settings,
                                               color: Colors.white,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Icon(
-                                              Icons.developer_board,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              //Sign Out
-                                              model.signOut();
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(20.0),
-                                              child: Icon(
-                                                Icons.power_settings_new,
-                                                color: Colors.white,
-                                              ),
                                             ),
                                           ),
                                           GestureDetector(
@@ -158,7 +158,7 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                           SizedBox(
-                            height: 70.0,
+                            height: 50.0,
                           ),
                           Column(
                             children: <Widget>[
