@@ -38,6 +38,7 @@ dependencies:
   firebase_core: ^0.5.3
   stacked: ^1.7.7
   shared_preferences: ^0.5.12+4
+  share: ^0.6.5+4
 
 dev_dependencies:
   flutter_test:

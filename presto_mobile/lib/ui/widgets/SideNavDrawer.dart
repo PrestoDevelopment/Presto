@@ -3,8 +3,9 @@ import 'package:presto_mobile/ui/resources/Colors.dart';
 class SideNavDrawer extends StatelessWidget {
   final Color verificationColor;
   final Function logoutTap;
+  final Function shareTap;
 
-  SideNavDrawer({this.verificationColor, this.logoutTap});
+  SideNavDrawer({this.verificationColor, this.logoutTap, this.shareTap});
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +75,7 @@ class SideNavDrawer extends StatelessWidget {
               Icons.share,
               color: color1,
             ),
+            onTap: shareTap,
           ),
           ListTile(
             title: Text(

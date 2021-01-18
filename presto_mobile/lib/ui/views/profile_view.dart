@@ -5,6 +5,7 @@ import 'package:presto_mobile/ui/widgets/SideNavDrawer.dart';
 import 'package:presto_mobile/ui/widgets/listToken.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
+import 'package:share/share.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -44,13 +45,21 @@ class _ProfileViewState extends State<ProfileView> {
                           //Sign Out
                           model.signOut();
                           },
+                        shareTap: (){
+                          final RenderBox box = context.findRenderObject();
+                          Share.share(
+                            "Hey! Checkout our new Community Building app where you can get small loans as fast as your husbands orgy ;)",
+                            subject: "Download Now",
+                            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+                          );
+                        },
                       ),
                     ),
                     body: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
                           ConstrainedBox(
-                            constraints: BoxConstraints(minHeight: height / 4),
+                            constraints: BoxConstraints(minHeight: height / 4.25),
                             child: Container(
                               //height: MediaQuery.of(context).size.height/4,
                               width: width,
@@ -61,16 +70,17 @@ class _ProfileViewState extends State<ProfileView> {
                                     bottomRight: Radius.circular(30.0)),
                               ),
                               child: Row(
+                                crossAxisAlignment:CrossAxisAlignment.start,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 14.0),
+                                        padding: const EdgeInsets.only(left: 12.0, top: 5.0),
                                         child: IconButton(
                                           color: Colors.white,
                                             icon: Icon(Icons.menu),
@@ -95,6 +105,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
+                                          top: 5.0,
                                           left: 14.0,
                                         ),
                                         child: Text(
@@ -105,38 +116,6 @@ class _ProfileViewState extends State<ProfileView> {
                                               fontSize: 15.0,
                                               color: Colors.white),
                                         ),
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Icon(
-                                              Icons.settings,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              //In App Notification Page
-
-                                              // Navigator.of(context)
-                                              //     .push(MaterialPageRoute(
-                                              //   builder: (context) =>
-                                              //       InAppNotificationPage(),
-                                              //   settings: RouteSettings(
-                                              //       name: InAppNotificationPage.id),
-                                              // ));
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(20.0),
-                                              child: Icon(
-                                                Icons.notifications,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
                                       ),
                                     ],
                                   ),
