@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
+import 'package:presto_mobile/ui/widgets/TransButton.dart';
 
 Widget borrowCard(n, a, b) {
   return Padding(
@@ -86,7 +87,7 @@ Widget borrowCard(n, a, b) {
   );
 }
 
-Widget mixedCard(n, a, height, width, boolean) {
+Widget mixedCard(n, a, height, width, boolean, status) {
   bool lend = boolean;
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -101,21 +102,7 @@ Widget mixedCard(n, a, height, width, boolean) {
           subtitle: Text("₹ " + a,
               style: TextStyle(
                   fontSize: 15, color: lend ? Colors.green : Colors.red)),
-          trailing: lend
-              ? GestureDetector(
-                  child: Container(
-                    height: height / 17,
-                    width: width / 4,
-                    color: color.color1,
-                    child: Center(
-                      child: Text(
-                        "Pay Now!",
-                        style: TextStyle(fontSize: 20.0, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                )
-              : null,
+          trailing: TransButton(status),
           children: <Widget>[
             SizedBox(
               height: 10,
