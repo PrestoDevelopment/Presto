@@ -41,6 +41,11 @@ class _ProfileViewState extends State<ProfileView> {
                       color: Colors.white,
                       child: SideNavDrawer(
                         verificationColor: model.user.emailVerified ? Colors.green : Colors.red,
+                        emailVeriTap: (){
+                          setState(() {
+                            model.emailVeriPop();
+                          });
+                        },
                         logoutTap: (){
                           //Sign Out
                           model.signOut();
@@ -48,8 +53,8 @@ class _ProfileViewState extends State<ProfileView> {
                         shareTap: (){
                           final RenderBox box = context.findRenderObject();
                           Share.share(
-                            "Hey! Checkout our new Community Building app where you can get small loans as fast as your husbands orgy ;)",
-                            subject: "Download Now",
+                            "Hey! I cordially invite you to join the RVCEians United community which will enable you to borrow small amount of money, interest free. You can borrow up to 500-2500 Rs from your community through this platform. Excited to welcome you to the community.",
+                            subject: "Download New Presto Mobile App Now!!",
                             sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
                           );
                         },
@@ -147,6 +152,11 @@ class _ProfileViewState extends State<ProfileView> {
                                 trailName: model.user != null
                                     ? '${model.user.contact}'
                                     : 'error',
+                              ),
+                              ListToken(
+                                name: 'Community Name',
+                                icon: Icons.people,
+                                trailName: 'RVCEians United',
                               ),
                               ListToken(
                                 name: 'Total Amount Borrowed',

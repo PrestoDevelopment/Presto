@@ -2,6 +2,7 @@ import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
+import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/locator.dart';
 import 'package:stacked/stacked.dart';
@@ -10,7 +11,7 @@ class ProfileModel extends StreamViewModel {
   final AuthenticationService _authenticationService = AuthenticationService();
   final NavigationService _navigationService = locator<NavigationService>();
   final FireStoreService _fireStoreService = FireStoreService();
-
+  final DialogService _dialogService = locator<DialogService>();
   // final SharedPreferencesService _preferencesService =
   //     SharedPreferencesService();
 
@@ -59,6 +60,13 @@ class ProfileModel extends StreamViewModel {
   //     print("Got user in profile View!!");
   //   }
   // }
+
+  Function emailVeriPop(){
+    _dialogService.showDialog(
+      title: "Email Verification",
+      description: "A verification email has been sent to registered Email, Please verify",
+    );
+  }
 
   Future signOut() async {
     bool sure = await _authenticationService.signOut();

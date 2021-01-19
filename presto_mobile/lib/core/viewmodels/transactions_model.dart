@@ -74,6 +74,18 @@ class TransactionsModel extends BaseModel {
           borrowCard(borrowed[i].lenderName, borrowed[i].amount, "Borrow"));
     }
     for (int i = 0; i < borrowed.length; i++) {
+      String status;
+      if(borrowed[i].lenderRecievedMoney){
+        status = "Transaction Finished";
+      }else if(borrowed[i].borrowerSentMoney){
+        status = "Borrower sent money";
+      }else if(borrowed[i].borrowerRecievedMoney){
+        status = "Borrower Recieved money";
+      }else if(borrowed[i].lenderSentMoney){
+        status = "Lender Sent Money";
+      }else{
+        status = "No Transaction";
+      }
       borrowList.add(
         mixedCard(
           borrowed[i].lenderName,
@@ -84,10 +96,23 @@ class TransactionsModel extends BaseModel {
               borrowed[i].borrowerSentMoney &&
               borrowed[i].lenderRecievedMoney &&
               borrowed[i].lenderSentMoney,
+          status
         ),
       );
     }
     for (int i = 0; i < lent.length; i++) {
+      String status;
+      if(borrowed[i].lenderRecievedMoney){
+        status = "Transaction Finished";
+      }else if(borrowed[i].borrowerSentMoney){
+        status = "Borrower sent money";
+      }else if(borrowed[i].borrowerRecievedMoney){
+        status = "Borrower Recieved money";
+      }else if(borrowed[i].lenderSentMoney){
+        status = "Lender Sent Money";
+      }else{
+        status = "No Transaction";
+      }
       lendList.add(
         mixedCard(
           lent[i].borrowerName,
@@ -98,6 +123,7 @@ class TransactionsModel extends BaseModel {
               borrowed[i].borrowerSentMoney &&
               borrowed[i].lenderRecievedMoney &&
               borrowed[i].lenderSentMoney,
+          status
         ),
       );
     }

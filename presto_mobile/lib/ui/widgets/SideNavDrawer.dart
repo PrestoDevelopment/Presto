@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart';
 class SideNavDrawer extends StatelessWidget {
   final Color verificationColor;
+  final Function emailVeriTap;
+  final Function phoneVeritap;
   final Function logoutTap;
   final Function shareTap;
 
-  SideNavDrawer({this.verificationColor, this.logoutTap, this.shareTap});
+  SideNavDrawer({this.verificationColor, this.logoutTap, this.shareTap, this.emailVeriTap, this.phoneVeritap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class SideNavDrawer extends StatelessWidget {
                   color: verificationColor,
               ),
             ),
+            onTap: emailVeriTap,
             trailing: Icon(
               Icons.email,
               color: verificationColor,
