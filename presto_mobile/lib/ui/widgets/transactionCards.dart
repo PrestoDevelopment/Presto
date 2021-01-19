@@ -102,7 +102,9 @@ Widget mixedCard(n, a, height, width, boolean, status) {
           subtitle: Text("₹ " + a,
               style: TextStyle(
                   fontSize: 15, color: lend ? Colors.green : Colors.red)),
-          trailing: TransButton(status),
+          trailing: TransButton(
+            tranStatus: status,
+          ),
           children: <Widget>[
             SizedBox(
               height: 10,
