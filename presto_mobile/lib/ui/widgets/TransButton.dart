@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart';
+import 'package:file_picker/file_picker.dart';
 class TransButton extends StatelessWidget {
   final String tranStatus;
 
-  TransButton(this.tranStatus);
+  TransButton({this.tranStatus});
+
+  Future TransButtonTap() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+
+    if(result != null) {
+      PlatformFile file = result.files.first;
+
+      print(file.name);
+      print(file.bytes);
+      print(file.size);
+      print(file.extension);
+      print(file.path);
+    } else {
+      // User canceled the picker
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +56,7 @@ class TransButton extends StatelessWidget {
             ),
           ),
         ),
+        onTap: TransButtonTap,
       );
     }else{
       return null;
