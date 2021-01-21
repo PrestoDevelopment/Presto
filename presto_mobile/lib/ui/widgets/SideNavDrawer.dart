@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart';
+
 class SideNavDrawer extends StatelessWidget {
-  final Color verificationColor;
+  final Color emailVerificationColor;
+  final Color contactVerificationColor;
   final Function emailVeriTap;
   final Function phoneVeritap;
   final Function logoutTap;
   final Function shareTap;
 
-  SideNavDrawer({this.verificationColor, this.logoutTap, this.shareTap, this.emailVeriTap, this.phoneVeritap});
+  SideNavDrawer({
+    this.emailVerificationColor,
+    this.contactVerificationColor,
+    this.logoutTap,
+    this.shareTap,
+    this.emailVeriTap,
+    this.phoneVeritap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,36 +28,31 @@ class SideNavDrawer extends StatelessWidget {
             title: Text(
               'Email Verification',
               style: TextStyle(
-                  fontSize: 20.0,
-                  color: verificationColor,
+                fontSize: 20.0,
+                color: emailVerificationColor,
               ),
             ),
             onTap: emailVeriTap,
             trailing: Icon(
               Icons.email,
-              color: verificationColor,
+              color: emailVerificationColor,
             ),
           ),
           ListTile(
             title: Text(
               "Phone Verification",
-              style: TextStyle(
-                fontSize: 20.0,
-                color: verificationColor
-              ),
+              style: TextStyle(fontSize: 20.0, color: contactVerificationColor),
             ),
             trailing: Icon(
               Icons.phone,
-              color: verificationColor,
+              color: contactVerificationColor,
             ),
+            onTap: phoneVeritap,
           ),
           ListTile(
             title: Text(
               "Notifications",
-              style: TextStyle(
-                fontSize: 20.0,
-                color: color1
-              ),
+              style: TextStyle(fontSize: 20.0, color: color1),
             ),
             trailing: Icon(
               Icons.notifications,
@@ -69,10 +73,7 @@ class SideNavDrawer extends StatelessWidget {
           ListTile(
             title: Text(
               "Share with Friends",
-              style: TextStyle(
-                fontSize: 20.0,
-                color: color1
-              ),
+              style: TextStyle(fontSize: 20.0, color: color1),
             ),
             trailing: Icon(
               Icons.share,
@@ -83,10 +84,7 @@ class SideNavDrawer extends StatelessWidget {
           ListTile(
             title: Text(
               "About Us",
-              style: TextStyle(
-                fontSize: 20.0,
-                color: color1
-              ),
+              style: TextStyle(fontSize: 20.0, color: color1),
             ),
             trailing: Icon(
               Icons.developer_board,
@@ -96,10 +94,7 @@ class SideNavDrawer extends StatelessWidget {
           ListTile(
             title: Text(
               "Logout",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  color: color1
-              ),
+              style: TextStyle(fontSize: 20.0, color: color1),
             ),
             trailing: Icon(
               Icons.power_settings_new,

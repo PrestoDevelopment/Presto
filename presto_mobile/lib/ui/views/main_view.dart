@@ -21,16 +21,16 @@ class _MainPageViewState extends State<MainPageView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainPageModel>.reactive(
       viewModelBuilder: () => MainPageModel(),
-      builder: (context, model, child) => model.busy
+      builder: (context, model, child) => model.isBusy
           ? Center(
               child: Container(
                 child: FadingText(
                   'Loading Main Page...',
                 ),
-        ),
-      )
+              ),
+            )
           : Scaffold(
-        body: getViewForIndex(model.selectedIndex),
+              body: getViewForIndex(model.selectedIndex),
               bottomNavigationBar: BottomNavigationBar(
                 items: [
                   BottomNavigationBarItem(
@@ -42,10 +42,10 @@ class _MainPageViewState extends State<MainPageView> {
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-              icon: Icon(Icons.monetization_on),
-              label: 'Recent',
-            ),
-          ],
+                    icon: Icon(Icons.monetization_on),
+                    label: 'Recent',
+                  ),
+                ],
                 backgroundColor: Colors.white,
                 currentIndex: model.selectedIndex,
                 unselectedItemColor: Colors.black,

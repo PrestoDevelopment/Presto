@@ -4,8 +4,8 @@ import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:presto_mobile/ui/widgets/SideNavDrawer.dart';
 import 'package:presto_mobile/ui/widgets/listToken.dart';
 import 'package:progress_indicators/progress_indicators.dart';
-import 'package:stacked/stacked.dart';
 import 'package:share/share.dart';
+import 'package:stacked/stacked.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -40,23 +40,31 @@ class _ProfileViewState extends State<ProfileView> {
                     drawer: Container(
                       color: Colors.white,
                       child: SideNavDrawer(
-                        verificationColor: model.user.emailVerified ? Colors.green : Colors.red,
-                        emailVeriTap: (){
-                          setState(() {
-                            model.emailVeriPop();
-                          });
+                        contactVerificationColor: model.user.contactVerified
+                            ? Colors.green
+                            : Colors.red,
+                        emailVerificationColor: model.user.emailVerified
+                            ? Colors.green
+                            : Colors.red,
+                        emailVeriTap: () {
+                          if (!model.user.emailVerified) model.emailVeriPop();
                         },
-                        logoutTap: (){
+                        logoutTap: () {
                           //Sign Out
                           model.signOut();
-                          },
-                        shareTap: (){
+                        },
+                        phoneVeritap: () {
+                          print(model.user.contactVerified);
+                          if (!model.user.contactVerified)
+                            model.navigateToOtp();
+                        },
+                        shareTap: () {
                           final RenderBox box = context.findRenderObject();
                           Share.share(
-                            "Hey! I cordially invite you to join the RVCEians United community which will enable you to borrow small amount of money, interest free. You can borrow up to 500-2500 Rs from your community through this platform. Excited to welcome you to the community.",
-                            subject: "Download New Presto Mobile App Now!!",
-                            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-                          );
+                              "Hey! I cordially invite you to join the RVCEians United community which will enable you to borrow small amount of money, interest free. You can borrow up to 500-2500 Rs from your community through this platform. Excited to welcome you to the community. Please enter this referral code ${model.user.referralCode}",
+                              subject: "Download New Presto Mobile App Now!!",
+                              sharePositionOrigin:
+                                  box.localToGlobal(Offset.zero) & box.size);
                         },
                       ),
                     ),
@@ -64,7 +72,8 @@ class _ProfileViewState extends State<ProfileView> {
                       child: Column(
                         children: <Widget>[
                           ConstrainedBox(
-                            constraints: BoxConstraints(minHeight: height / 4.25),
+                            constraints:
+                                BoxConstraints(minHeight: height / 4.25),
                             child: Container(
                               //height: MediaQuery.of(context).size.height/4,
                               width: width,
@@ -75,7 +84,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     bottomRight: Radius.circular(30.0)),
                               ),
                               child: Row(
-                                crossAxisAlignment:CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
@@ -85,11 +94,14 @@ class _ProfileViewState extends State<ProfileView> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 12.0, top: 5.0),
+                                        padding: const EdgeInsets.only(
+                                            left: 12.0, top: 5.0),
                                         child: IconButton(
                                           color: Colors.white,
-                                            icon: Icon(Icons.menu),
-                                            onPressed: () => scaffoldKey.currentState.openDrawer(),
+                                          icon: Icon(Icons.menu),
+                                          onPressed: () => scaffoldKey
+                                              .currentState
+                                              .openDrawer(),
                                         ),
                                       ),
                                       Padding(

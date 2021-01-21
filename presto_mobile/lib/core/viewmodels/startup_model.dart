@@ -2,14 +2,15 @@ import 'package:connectivity/connectivity.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
-import 'package:presto_mobile/core/viewmodels/base_model.dart';
 import 'package:presto_mobile/locator.dart';
+import 'package:stacked/stacked.dart';
 
-class StartUpModel extends BaseModel {
+class StartUpModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final Connectivity connectivity = Connectivity();
+
   void checkConnectivity() async {
     var connectivityResult = await connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {

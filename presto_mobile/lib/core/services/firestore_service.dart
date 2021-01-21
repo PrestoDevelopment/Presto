@@ -11,7 +11,7 @@ class FireStoreService {
   final CollectionReference _userCollectionReference =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _limitCollectionReference =
-  FirebaseFirestore.instance.collection('limits');
+      FirebaseFirestore.instance.collection('limits');
 
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
@@ -69,6 +69,27 @@ class FireStoreService {
         print("Got parent Document : Parent Name : ${parent?.name}");
         parent.referredTo.add(child);
         _userCollectionReference.doc(code).update(parent.toJson());
+        return true;
+      }
+    } catch (e) {
+      if (e is PlatformException) {
+        print("@@@@@@@@@@@@@@@@@@@");
+        print(e.message);
+        return e.message;
+      } else {
+        print("--------------------------");
+        print(e.toString());
+        return e.toString();
+      }
+    }
+  }
+
+  Future userDocUpdate(UserModel user) async {
+    var result = await _userCollectionReference.doc(user.referralCode).get();
+    print("Getting parent Document");
+    try {
+      if (result.exists) {
+        _userCollectionReference.doc(user.referralCode).update(user.toJson());
         return true;
       }
     } catch (e) {

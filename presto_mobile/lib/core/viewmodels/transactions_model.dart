@@ -3,11 +3,11 @@ import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
-import 'package:presto_mobile/core/viewmodels/base_model.dart';
 import 'package:presto_mobile/locator.dart';
 import 'package:presto_mobile/ui/widgets/transactionCards.dart';
+import 'package:stacked/stacked.dart';
 
-class TransactionsModel extends BaseModel {
+class TransactionsModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
 
@@ -75,56 +75,54 @@ class TransactionsModel extends BaseModel {
     }
     for (int i = 0; i < borrowed.length; i++) {
       String status;
-      if(borrowed[i].lenderRecievedMoney){
+      if (borrowed[i].lenderRecievedMoney) {
         status = "Transaction Finished";
-      }else if(borrowed[i].borrowerSentMoney){
+      } else if (borrowed[i].borrowerSentMoney) {
         status = "Borrower sent money";
-      }else if(borrowed[i].borrowerRecievedMoney){
+      } else if (borrowed[i].borrowerRecievedMoney) {
         status = "Borrower Recieved money";
-      }else if(borrowed[i].lenderSentMoney){
+      } else if (borrowed[i].lenderSentMoney) {
         status = "Lender Sent Money";
-      }else{
+      } else {
         status = "No Transaction";
       }
       borrowList.add(
         mixedCard(
-          borrowed[i].lenderName,
-          borrowed[i].amount,
-          683,
-          411,
-          borrowed[i].borrowerRecievedMoney &&
-              borrowed[i].borrowerSentMoney &&
-              borrowed[i].lenderRecievedMoney &&
-              borrowed[i].lenderSentMoney,
-          status
-        ),
+            borrowed[i].lenderName,
+            borrowed[i].amount,
+            683,
+            411,
+            borrowed[i].borrowerRecievedMoney &&
+                borrowed[i].borrowerSentMoney &&
+                borrowed[i].lenderRecievedMoney &&
+                borrowed[i].lenderSentMoney,
+            status),
       );
     }
     for (int i = 0; i < lent.length; i++) {
       String status;
-      if(borrowed[i].lenderRecievedMoney){
+      if (borrowed[i].lenderRecievedMoney) {
         status = "Transaction Finished";
-      }else if(borrowed[i].borrowerSentMoney){
+      } else if (borrowed[i].borrowerSentMoney) {
         status = "Borrower sent money";
-      }else if(borrowed[i].borrowerRecievedMoney){
+      } else if (borrowed[i].borrowerRecievedMoney) {
         status = "Borrower Recieved money";
-      }else if(borrowed[i].lenderSentMoney){
+      } else if (borrowed[i].lenderSentMoney) {
         status = "Lender Sent Money";
-      }else{
+      } else {
         status = "No Transaction";
       }
       lendList.add(
         mixedCard(
-          lent[i].borrowerName,
-          lent[i].amount,
-          683,
-          411,
-          borrowed[i].borrowerRecievedMoney &&
-              borrowed[i].borrowerSentMoney &&
-              borrowed[i].lenderRecievedMoney &&
-              borrowed[i].lenderSentMoney,
-          status
-        ),
+            lent[i].borrowerName,
+            lent[i].amount,
+            683,
+            411,
+            borrowed[i].borrowerRecievedMoney &&
+                borrowed[i].borrowerSentMoney &&
+                borrowed[i].lenderRecievedMoney &&
+                borrowed[i].lenderSentMoney,
+            status),
       );
     }
   }

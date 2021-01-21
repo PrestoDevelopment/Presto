@@ -1,6 +1,6 @@
-import 'package:presto_mobile/core/viewmodels/base_model.dart';
+import 'package:stacked/stacked.dart';
 
-class MainPageModel extends BaseModel {
+class MainPageModel extends BaseViewModel {
   var _pageID = [
     'ProfilePage',
     'HomePage',
@@ -11,7 +11,6 @@ class MainPageModel extends BaseModel {
   get pageID => _pageID;
 
   get selectedIndex => _selectedIndex;
-
   void onTappedBar(int value) {
     // FirebaseAnalytics analytics = FirebaseAnalytics();
     // analytics.setCurrentScreen(screenName: _pageID[value]);

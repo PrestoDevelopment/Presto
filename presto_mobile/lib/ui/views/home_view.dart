@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             )
           : Scaffold(
-        backgroundColor: Colors.white,
+              backgroundColor: Colors.white,
               body: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,

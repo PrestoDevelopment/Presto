@@ -3,12 +3,12 @@ import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
-import 'package:presto_mobile/core/viewmodels/base_model.dart';
 import 'package:presto_mobile/locator.dart';
+import 'package:stacked/stacked.dart';
 
 import '../../constants/route_names.dart';
 
-class LoginModel extends BaseModel {
+class LoginModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   final DialogService _dialogService = locator<DialogService>();

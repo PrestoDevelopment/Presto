@@ -3,3 +3,4 @@ const String SignupViewRoute = "SignUp";
 const String HomeViewRoute = "HomeView";
 const String MainPageViewRoute = "MainPage";
 const String StartUpViewRoute = "StartUp";
+const String OtpViewRoute = "Otp";

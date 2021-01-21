@@ -17,7 +17,7 @@ class _TransactionsViewState extends State<TransactionsView> {
     return ViewModelBuilder<TransactionsModel>.reactive(
       viewModelBuilder: () => TransactionsModel(),
       onModelReady: (model) => model.onReady(height, width),
-      builder: (context, model, child) => model.busy
+      builder: (context, model, child) => model.isBusy
           ? Center(
               child: Container(
                 color: Colors.amber,

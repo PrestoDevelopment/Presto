@@ -29,6 +29,36 @@ class AuthenticationService {
     return _auth.currentUser.displayName;
   }
 
+  void verifyPhone(
+    String verificationId,
+    Function codeSent,
+    Function codeAutoRetrievalTimeout,
+    Function complete,
+    UserModel user,
+  ) {
+    String id = "";
+    _auth.verifyPhoneNumber(
+      phoneNumber: '+91' + user.contact.trim(),
+      verificationCompleted: complete,
+      verificationFailed: (FirebaseException e) {
+        _dialogService.showDialog(
+          title: "Error in Verification",
+          description: e.message.toString(),
+        );
+      },
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
+  }
+
+  void verifyEmail(UserModel user) async {
+    try {
+      await _auth.currentUser.sendEmailVerification();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future login(String email, String pass) async {
     print("Logging in");
     try {
@@ -69,9 +99,6 @@ class AuthenticationService {
   }
 
   Future _populateCurrentUser(var cred, bool isLogIn) async {
-    print("populating user");
-    print(cred.runtimeType);
-    print(isLogIn);
     if (cred is FirebaseAuthException) return cred.message;
     if (cred is String) return cred;
     if (cred != null) {

@@ -109,7 +109,7 @@ class LoginView extends StatelessWidget {
                       ),
                       BusyButton(
                         title: "Log In",
-                        busy: model.busy,
+                        busy: model.isBusy,
                         onPressed: () {
                           print("initiating login Process");
                           model.login(

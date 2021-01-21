@@ -6,12 +6,9 @@ import 'package:stacked/stacked.dart';
 class HomeModel extends BaseViewModel {
   // final AuthenticationService _authenticationService = AuthenticationService();
   final DialogService _dialogService = locator<DialogService>();
-
   // final NavigationService _navigationService = locator<NavigationService>();
   final FireStoreService _fireStoreService = FireStoreService();
 
-  // final SharedPreferencesService _preferencesService =
-  //     SharedPreferencesService();
   double _amount = 100.0;
 
   double get amount => _amount;
@@ -24,46 +21,14 @@ class HomeModel extends BaseViewModel {
 
   void onReady() async {
     print("Getting limits in Home view !!!!!!!!!!!!!");
-    // var temp =
-    //     await _fireStoreService.getUser(_authenticationService.retrieveCode());
-    // if (temp is UserModel) {
-    //   _user = temp;
-    //   print("Got user in home View!!");
-    //   notifyListeners();
-    // }
+
     setBusy(true);
     await _fireStoreService.getBorrowingLimit().then((value) {
       _borrowingLimits = value;
       _amount = _borrowingLimits["borrowLowerLimit"];
       setBusy(false);
     });
-    // listenToDatabase();
   }
-
-  // void listenToDatabase() {
-  //   setBusy(true);
-  //   // _fireStoreService
-  //   //     .listenToUserDocumentRealTime(_authenticationService.retrieveCode())
-  //   //     ?.listen((updateUser) {
-  //   //   if (updateUser != null) {
-  //   //     print("Got user Update");
-  //   //     _user = updateUser;
-  //   //     notifyListeners();
-  //   //   }
-  //   // });
-  //   _fireStoreService.listenToUserLimitsRealTime()?.listen((updateLimit) {
-  //     if (updateLimit != null) {
-  //       print("Got limits Update");
-  //       _borrowingLimits = {
-  //         "borrowUpperLimit": updateLimit["borrowUpperLimit"].toDouble(),
-  //         "borrowLowerLimit": updateLimit["borrowLowerLimit"].toDouble(),
-  //       };
-  //       _amount = _borrowingLimits["borrowLowerLimit"];
-  //       notifyListeners();
-  //     }
-  //   });
-  //   setBusy(false);
-  // }
 
   void increaseAmount(double value) {
     if (_borrowingLimits.isNotEmpty) {
@@ -105,15 +70,4 @@ class HomeModel extends BaseViewModel {
     notifyListeners();
     setBusy(false);
   }
-
-// @override
-// Map<String, StreamData> get streamsMap => {
-//       _UserDataStreamKey: StreamData<UserModel>(
-//           _fireStoreService.listenToUserDocumentRealTime(
-//               _authenticationService.retrieveCode())),
-//       _UserLimitStreamKey:
-//           StreamData<Map>(_fireStoreService.listenToUserLimitsRealTime()),
-//     };
-// @override
-// Stream get stream => _fireStoreService.listenToUserLimitsRealTime();
 }

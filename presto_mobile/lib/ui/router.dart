@@ -3,6 +3,7 @@ import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
 import 'package:presto_mobile/ui/views/login_view.dart';
 import 'package:presto_mobile/ui/views/main_view.dart';
+import 'package:presto_mobile/ui/views/otp_view.dart';
 import 'package:presto_mobile/ui/views/signup_view.dart';
 
 import '../constants/route_names.dart';
@@ -30,7 +31,14 @@ Route<dynamic> customRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: LoginView(),
       );
-
+    case OtpViewRoute:
+      var user = settings.arguments;
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: OtpVerificationView(
+          user: user,
+        ),
+      );
     //For passing arguements
 
     case SignupViewRoute:

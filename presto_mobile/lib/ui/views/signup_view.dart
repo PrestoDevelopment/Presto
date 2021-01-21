@@ -125,7 +125,7 @@ class SignUpView extends StatelessWidget {
                       ),
                       BusyButton(
                         title: "Sign Up",
-                        busy: model.busy,
+                        busy: model.isBusy,
                         onPressed: () {
                           print("initiating signUP");
                           model.signUp(
