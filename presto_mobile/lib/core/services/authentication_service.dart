@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
@@ -69,6 +70,7 @@ class AuthenticationService {
         email: email,
         password: pass,
       );
+
       var result;
       if (authResult is String)
         return authResult;
@@ -90,6 +92,11 @@ class AuthenticationService {
 
   Future signUp(UserModel user, String pass) async {
     try {
+      FirebaseMessaging _fcm = FirebaseMessaging();
+      await _fcm.getToken().then((token) async {
+        await _sharedPreferencesService.synUserToken(token);
+        user.notificationToken = token;
+      });
       _currentUser = user;
       print("Signing in");
       var authResult = await _auth.createUserWithEmailAndPassword(
@@ -133,11 +140,20 @@ class AuthenticationService {
       //return true after setting up user in database
       await _sharedPreferencesService.synUserEmailPass(email, pass);
       await _sharedPreferencesService.synUserCode(code);
+
       if (isLogIn) {
         try {
+          var userToken;
+          FirebaseMessaging _fcm = FirebaseMessaging();
+          await _fcm.getToken().then((token) async {
+            await _sharedPreferencesService.synUserToken(token);
+            userToken = token;
+          });
           _currentUser = await _fireStoreService.getUser(cred.user.displayName);
           // userController.add(_currentUser);
+          _currentUser.notificationToken = userToken;
           print("Completed populating user");
+          _fireStoreService.userDocUpdate(_currentUser);
           return true;
         } catch (e) {
           print("theres an error here");

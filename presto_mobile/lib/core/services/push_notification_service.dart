@@ -14,9 +14,6 @@ class PushNotificationService {
       locator<SharedPreferencesService>();
 
   Future initialise() async {
-    await _fcm.getToken().then((token) async {
-      await _sharedPreferencesService.synUserToken(token);
-    });
     if (Platform.isIOS) {
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
