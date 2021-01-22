@@ -49,11 +49,12 @@ class SharedPreferencesService {
   Future getUserCode() async {
     _preferences = await SharedPreferences.getInstance();
     try {
-      var code = _preferences.getString('code');
-      if (code != null) {
-        return code;
-      } else
-        throw PlatformException(code: "Error", message: "No Code");
+      if (_preferences.containsKey('code')) {
+        var code = _preferences.getString('code');
+        if (code != null) {
+          return code;
+        }
+      }
     } catch (e) {
       if (e is PlatformException) print(e.message);
       print(e.toString());
@@ -76,15 +77,16 @@ class SharedPreferencesService {
   Future getUserEmailPass() async {
     _preferences = await SharedPreferences.getInstance();
     try {
-      var email = _preferences.getString('email');
-      var pass = _preferences.getString('pass');
-      if (pass != null && email != null) {
-        return {
-          'pass': pass,
-          'email': email,
-        };
-      } else
-        throw PlatformException(code: "Error", message: "No Email And PAss");
+      if (_preferences.containsKey('email')) {
+        var email = _preferences.getString('email');
+        var pass = _preferences.getString('pass');
+        if (pass != null && email != null) {
+          return {
+            'pass': pass,
+            'email': email,
+          };
+        }
+      }
     } catch (e) {
       if (e is PlatformException) print(e.message);
       print(e.toString());
@@ -106,11 +108,12 @@ class SharedPreferencesService {
   Future getUserToken() async {
     try {
       _preferences = await SharedPreferences.getInstance();
-      var token = _preferences.getString('token');
-      if (token != null) {
-        return token;
-      } else
-        throw PlatformException(code: "Error", message: "No Email And PAss");
+      if (_preferences.containsKey('token')) {
+        var token = _preferences.getString('token');
+        if (token != null) {
+          return token;
+        }
+      }
     } catch (e) {
       if (e is PlatformException) print(e.message);
       print(e.toString());
