@@ -4,6 +4,7 @@ import 'package:presto_mobile/core/services/api_service.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
+import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 import 'package:presto_mobile/core/viewmodels/login_model.dart';
 import 'package:presto_mobile/core/viewmodels/signup_model.dart';
 
@@ -21,6 +22,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => Api());
   locator.registerLazySingleton(() => AuthenticationService());
   locator.registerLazySingleton(() => AnalyticsService());
+  locator.registerLazySingleton(() => SharedPreferencesService());
   // locator.registerLazySingleton(() => FireStoreService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());

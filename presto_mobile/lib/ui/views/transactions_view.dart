@@ -36,14 +36,16 @@ class _TransactionsViewState extends State<TransactionsView> {
                         height: 30,
                       ),
                       Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            "Recent Transactions",
-                            style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.black,
-                                fontFamily: "Oswald"),
-                          )),
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          "Recent Transactions",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.black,
+                            fontFamily: "Oswald",
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: 20.0,
                       ),

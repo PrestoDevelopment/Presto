@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
+import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 
+import '../../locator.dart';
 import '../models/user_model.dart';
 
 // ignore: camel_case_types
@@ -12,6 +16,10 @@ class FireStoreService {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _limitCollectionReference =
       FirebaseFirestore.instance.collection('limits');
+  final CollectionReference _transactionsCollectionReference =
+      FirebaseFirestore.instance.collection('transactions');
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
@@ -110,7 +118,13 @@ class FireStoreService {
       print("getting Data about user");
       var data = await _userCollectionReference.doc(code).get();
       if (data.exists) {
-        return UserModel.fromJson(data.data());
+        UserModel user = UserModel.fromJson(data.data());
+        FirebaseMessaging().getToken().then((value) {
+          user.notificationToken = value;
+          _sharedPreferencesService.synUserToken(value);
+        });
+        await userDocUpdate(user);
+        return user;
       } else
         return PlatformException(
           message: "User d\'ont Exist",
@@ -161,5 +175,42 @@ class FireStoreService {
       }
       return _userLimits.stream;
     });
+  }
+
+  Future createNewTransaction(
+    TransactionModel transaction,
+  ) async {
+    try {
+      await _transactionsCollectionReference
+          .doc(transaction.transactionId)
+          .set(transaction.toJson());
+      await _userCollectionReference
+          .doc(transaction.borrowerReferralCode)
+          .get()
+          .then((value) async {
+        UserModel user = UserModel.fromJson(value.data());
+        transaction.transactionMethods.forEach((element) {
+          ///Updates the count of payment method user has used
+          ///here the counts are stored in corresponding map:
+          ///0- PayTm
+          ///1- GPay
+          ///2- UPI
+          ///3- PhonePay
+          ///4- PayPal
+          user.paymentMethodsUsed[element] += 1;
+        });
+        user.transactionIds.add(transaction.transactionId);
+
+        await _userCollectionReference
+            .doc(user.referralCode)
+            .update(user.toJson());
+      });
+      return true;
+    } catch (e) {
+      print(e.toString());
+      if (e is FirebaseException) {
+        print(e.message);
+      }
+    }
   }
 }

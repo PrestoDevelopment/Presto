@@ -7,6 +7,7 @@ import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
+import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 import 'package:presto_mobile/locator.dart';
 
 import '../models/user_model.dart';
@@ -18,6 +19,8 @@ class AuthenticationService {
   // final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
   final FireStoreService _fireStoreService = FireStoreService();
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   UserModel _currentUser;
 
@@ -69,8 +72,15 @@ class AuthenticationService {
       var result;
       if (authResult is String)
         return authResult;
-      else if (authResult is UserCredential)
-        result = await _populateCurrentUser(authResult, true);
+      else if (authResult is UserCredential) {
+        result = await _populateCurrentUser(
+          authResult,
+          true,
+          email,
+          pass,
+          authResult.user.displayName,
+        );
+      }
       return result;
     } catch (e) {
       print("Theres an error in logging In");
@@ -88,21 +98,41 @@ class AuthenticationService {
       );
       if (user.referredBy == "CM01") {
         print("signing a community manager underling");
-        return await _populateCurrentUser(authResult, false);
+        return await _populateCurrentUser(
+          authResult,
+          false,
+          user.email,
+          pass,
+          user.referralCode,
+        );
       } else
         await _fireStoreService.parentDocUpdate(
             user.referredBy, user.referralCode);
-      return await _populateCurrentUser(authResult, false);
+      return await _populateCurrentUser(
+        authResult,
+        false,
+        user.email,
+        pass,
+        user.referralCode,
+      );
     } catch (e) {
       return e;
     }
   }
 
-  Future _populateCurrentUser(var cred, bool isLogIn) async {
+  Future _populateCurrentUser(
+    var cred,
+    bool isLogIn,
+    String pass,
+    String email,
+    String code,
+  ) async {
     if (cred is FirebaseAuthException) return cred.message;
     if (cred is String) return cred;
     if (cred != null) {
       //return true after setting up user in database
+      await _sharedPreferencesService.synUserEmailPass(email, pass);
+      await _sharedPreferencesService.synUserCode(code);
       if (isLogIn) {
         try {
           _currentUser = await _fireStoreService.getUser(cred.user.displayName);
@@ -159,6 +189,7 @@ class AuthenticationService {
       cancelTitle: "No :)",
     );
     if (response.confirmed) {
+      _sharedPreferencesService.clearUserLoginData();
       await _auth.signOut();
       return true;
     }

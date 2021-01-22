@@ -8,6 +8,7 @@ class UserModel {
   bool contactVerified;
   String referredBy;
   List<dynamic> referredTo;
+  List<int> paymentMethodsUsed;
 
   //Will Contain list of referral Codes of individuals whom he/she referred to.
   String referralCode;
@@ -39,6 +40,7 @@ class UserModel {
     this.notificationToken,
     this.totalBorrowed,
     this.totalLent,
+    this.paymentMethodsUsed,
   });
 
   UserModel.initial()
@@ -57,6 +59,7 @@ class UserModel {
         personalScore = null,
         totalBorrowed = 0,
         totalLent = 0,
+        paymentMethodsUsed = [],
         notificationToken = null;
 
   UserModel.fromJson(Map<String, dynamic> json)
@@ -75,6 +78,7 @@ class UserModel {
         userLocation = json['userLocation'] ?? null,
         totalBorrowed = json['totalBorrowed'] ?? 0,
         totalLent = json['totalLent'] ?? 0,
+        paymentMethodsUsed = json['paymentMethodsUsed'] ?? [0, 0, 0, 0, 0],
         notificationToken = json['notificationToken'] ?? "";
 
   Map<String, dynamic> toJson() => {
@@ -94,6 +98,7 @@ class UserModel {
         'notificationToken': notificationToken,
         'totalLent': totalLent,
         'totalBorrowed': totalBorrowed,
+        'paymentMethodsUsed': paymentMethodsUsed,
       };
 
   @override
@@ -114,6 +119,7 @@ class UserModel {
       other.userLocation == userLocation &&
       other.totalLent == totalLent &&
       other.totalBorrowed == totalBorrowed &&
+      other.paymentMethodsUsed == paymentMethodsUsed &&
       other.notificationToken == notificationToken;
 
   @override
@@ -135,6 +141,7 @@ class UserModel {
     result = result * 19 + notificationToken.hashCode;
     result = result * 19 + totalBorrowed.hashCode;
     result = result * 19 + totalLent.hashCode;
+    result = result * 19 + paymentMethodsUsed.hashCode;
     return result;
   }
 }

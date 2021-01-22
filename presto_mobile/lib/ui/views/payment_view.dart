@@ -17,22 +17,15 @@ class PaymentView extends StatefulWidget {
 }
 
 class _PaymentViewState extends State<PaymentView> {
-  List<String> paymentOptions = [];
-  List<String> availableOptions = [
-    "paytm",
-    "gpay",
-    "upi",
-    "phonepay",
-    "paypal",
-  ];
+  List<int> paymentOptions = [];
 
   void addToList(int i) {
-    paymentOptions.add(availableOptions[i]);
+    paymentOptions.add(i);
     print("Options Selected: ${paymentOptions.toString()}");
   }
 
   void removeFromList(int i) {
-    paymentOptions.remove(availableOptions[i]);
+    paymentOptions.remove(i);
     print("Options Selected: ${paymentOptions.toString()}");
   }
 

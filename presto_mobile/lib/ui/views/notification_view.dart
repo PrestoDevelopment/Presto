@@ -4,6 +4,10 @@ import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:stacked/stacked.dart';
 
 class NotificationView extends StatefulWidget {
+  final Notification notification;
+
+  NotificationView({this.notification});
+
   @override
   _NotificationViewState createState() => _NotificationViewState();
 }
@@ -11,6 +15,8 @@ class NotificationView extends StatefulWidget {
 class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => NotificationModel(),
       builder: (context, widget, child) {
@@ -21,7 +27,7 @@ class _NotificationViewState extends State<NotificationView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 20,
+                  height: height / 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -31,12 +37,12 @@ class _NotificationViewState extends State<NotificationView> {
                       radius: 60.0,
                       child: Text('Local Icon',
                           style:
-                              TextStyle(color: Colors.white, fontSize: 25.0)),
+                          TextStyle(color: Colors.white, fontSize: 25.0)),
                     ),
                     Column(
                       children: [
                         Text(
-                          'Creditworthy Score: 60',
+                          'Creditworthy Score: ${widget.notification.score}',
                           style: TextStyle(
                             fontSize: 20.0,
                           ),
@@ -48,26 +54,26 @@ class _NotificationViewState extends State<NotificationView> {
                           ),
                         ),
                         Container(
-                            height: MediaQuery.of(context).size.height / 5,
-                            width: MediaQuery.of(context).size.width / 4,
+                            height: height / 5,
+                            width: width / 4,
                             child: Image.asset('assets/images/paytm.png')),
                       ],
                     )
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 15,
+                  height: height / 15,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20.0),
                   child: Text(
-                    '1234',
+                    'Amount Requested : ${widget.notification.amount}',
                     style:
                         TextStyle(fontSize: 35.0, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
+                  width: width / 2,
                   child: Divider(
                     color: color.color1,
                     thickness: 5.0,
@@ -76,7 +82,7 @@ class _NotificationViewState extends State<NotificationView> {
                 Padding(
                   padding: EdgeInsets.only(left: 20.0, top: 20.0),
                   child: Container(
-                    width: MediaQuery.of(context).size.width / 2,
+                    width: width / 2,
                     child: Text(
                       'A fellow Bitsian is calling...',
                       style: TextStyle(
@@ -86,14 +92,14 @@ class _NotificationViewState extends State<NotificationView> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 4,
+                  height: height / 4,
                 ),
                 Row(
                   children: [
                     GestureDetector(
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.height / 15,
+                        width: width / 2,
+                        height: height / 15,
                         color: Colors.green,
                         child: Center(
                           child: Text(
@@ -106,8 +112,8 @@ class _NotificationViewState extends State<NotificationView> {
                     ),
                     GestureDetector(
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.height / 15,
+                        width: width / 2,
+                        height: height / 15,
                         color: Colors.red,
                         child: Center(
                           child: Text(

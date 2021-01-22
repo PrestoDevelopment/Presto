@@ -14,7 +14,9 @@ class MainPageModel extends BaseViewModel {
   get pageID => _pageID;
 
   void onModelReady() async {
+    // initialised Push notifications
     await _pushNotificationService.initialise();
+    // TODO: push InfoSlider if SignUp
   }
 
   get selectedIndex => _selectedIndex;

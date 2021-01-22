@@ -14,7 +14,7 @@ class TransactionModel {
   final bool lenderRecievedMoney;
   final bool borrowerSentMoney;
   final bool borrowerRecievedMoney;
-  final List<String> transactionMethods;
+  final List<int> transactionMethods;
 
   TransactionModel({
     this.transactionMethods,

@@ -49,9 +49,12 @@ Route<dynamic> customRoute(RouteSettings settings) {
         viewToShow: SignUpView(),
       );
     case NotificationViewRoute:
+      Notification notification = settings.arguments;
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: NotificationView(),
+        viewToShow: NotificationView(
+          notification: notification,
+        ),
       );
     case PaymentViewRoute:
       var data = settings.arguments;
