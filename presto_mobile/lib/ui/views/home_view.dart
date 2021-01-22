@@ -63,7 +63,7 @@ class _HomeViewState extends State<HomeView> {
                             height: height / 22,
                           ),
                           Text(
-                            "₹${model.amount?.ceil().toString() ?? 'Error'}",
+                            "₹${model.amount?.toInt().toString() ?? 'Error'}",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 50.0),
                           )
@@ -175,7 +175,7 @@ class _HomeViewState extends State<HomeView> {
                     BusyButton(
                       title: "Get Paid!",
                       busy: model.isBusy || model.borrowingLimits == null,
-                      onPressed: () async {},
+                      onPressed: () async => model.goToPaymentPage(),
                     ),
                   ],
                 ),

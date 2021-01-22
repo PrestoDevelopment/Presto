@@ -14,8 +14,10 @@ class TransactionModel {
   final bool lenderRecievedMoney;
   final bool borrowerSentMoney;
   final bool borrowerRecievedMoney;
+  final List<String> transactionMethods;
 
   TransactionModel({
+    this.transactionMethods,
     this.transactionId,
     this.initiationDate,
     this.approvedStatus,
@@ -34,6 +36,7 @@ class TransactionModel {
       : transactionId = json['transactionId'],
         initiationDate = json['initiationDate'],
         approvedStatus = json['approvedStatus'],
+        transactionMethods = json['transactionMethods'],
         lenderReferralCode = json['lenderReferralCode'],
         borrowerReferralCode = json['borrowerReferralCode'],
         borrowerName = json['borrowerName'],
@@ -55,6 +58,7 @@ class TransactionModel {
         'lenderSentMoney': lenderSentMoney,
         'lenderName': lenderName,
         'amount': amount,
+        'transactionMethods': transactionMethods,
         'borrowerRecievedMoney': borrowerRecievedMoney,
         'borrowerSentMoney': borrowerSentMoney,
         'lenderRecievedMoney': lenderRecievedMoney,

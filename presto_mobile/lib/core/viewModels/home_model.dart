@@ -1,12 +1,14 @@
+import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
+import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/locator.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeModel extends BaseViewModel {
   // final AuthenticationService _authenticationService = AuthenticationService();
   final DialogService _dialogService = locator<DialogService>();
-  // final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   final FireStoreService _fireStoreService = FireStoreService();
 
   double _amount = 100.0;
@@ -18,6 +20,16 @@ class HomeModel extends BaseViewModel {
 
   // bool get hasUserData => dataReady(_UserDataStreamKey);
   // UserModel get user => dataMap[_UserDataStreamKey];
+
+  void goToPaymentPage() async {
+    setBusy(true);
+    await _navigationService.navigateTo(
+      PaymentViewRoute,
+      false,
+      arguments: _amount,
+    );
+    setBusy(false);
+  }
 
   void onReady() async {
     print("Getting limits in Home view !!!!!!!!!!!!!");

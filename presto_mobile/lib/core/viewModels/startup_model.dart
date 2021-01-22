@@ -9,6 +9,7 @@ class StartUpModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
+
   final Connectivity connectivity = Connectivity();
 
   void checkConnectivity() async {
@@ -28,16 +29,13 @@ class StartUpModel extends BaseViewModel {
 
   Future handleStartUpLogic() async {
     // Register for push notifications
-    // await _pushNotificationService.initialise();
-
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
-
     if (hasLoggedInUser) {
       print("going home");
       _navigationService.navigateTo(MainPageViewRoute, true);
     } else {
       print("going Login");
-      _navigationService.navigateTo(LoginViewRoute, true);
+      _navigationService.navigateTo(LoginViewRoute, true, arguments: true);
     }
   }
 }

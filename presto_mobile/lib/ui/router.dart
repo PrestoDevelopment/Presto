@@ -3,7 +3,9 @@ import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
 import 'package:presto_mobile/ui/views/login_view.dart';
 import 'package:presto_mobile/ui/views/main_view.dart';
+import 'package:presto_mobile/ui/views/notification_view.dart';
 import 'package:presto_mobile/ui/views/otp_view.dart';
+import 'package:presto_mobile/ui/views/payment_view.dart';
 import 'package:presto_mobile/ui/views/signup_view.dart';
 
 import '../constants/route_names.dart';
@@ -40,12 +42,24 @@ Route<dynamic> customRoute(RouteSettings settings) {
         ),
       );
     //For passing arguements
-
     case SignupViewRoute:
       // var abc = settings.arguements
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: SignUpView(),
+      );
+    case NotificationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: NotificationView(),
+      );
+    case PaymentViewRoute:
+      var data = settings.arguments;
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: PaymentView(
+          amount: data,
+        ),
       );
     default:
       var message = settings.arguments;

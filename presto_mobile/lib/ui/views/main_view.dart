@@ -20,41 +20,42 @@ class _MainPageViewState extends State<MainPageView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainPageModel>.reactive(
-      viewModelBuilder: () => MainPageModel(),
-      builder: (context, model, child) => model.isBusy
-          ? Center(
-              child: Container(
-                child: FadingText(
-                  'Loading Main Page...',
-                ),
-              ),
-            )
-          : Scaffold(
-              body: getViewForIndex(model.selectedIndex),
-              bottomNavigationBar: BottomNavigationBar(
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline),
-                    label: 'Profile',
+        viewModelBuilder: () => MainPageModel(),
+        builder: (context, model, child) {
+          return model.isBusy
+              ? Center(
+                  child: Container(
+                    child: FadingText(
+                      'Loading Main Page...',
+                    ),
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
+                )
+              : Scaffold(
+                  body: getViewForIndex(model.selectedIndex),
+                  bottomNavigationBar: BottomNavigationBar(
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.person_outline),
+                        label: 'Profile',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.monetization_on),
+                        label: 'Recent',
+                      ),
+                    ],
+                    backgroundColor: Colors.white,
+                    currentIndex: model.selectedIndex,
+                    unselectedItemColor: Colors.black,
+                    type: BottomNavigationBarType.fixed,
+                    selectedItemColor: color.color1,
+                    onTap: (value) => model.onTappedBar(value),
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.monetization_on),
-                    label: 'Recent',
-                  ),
-                ],
-                backgroundColor: Colors.white,
-                currentIndex: model.selectedIndex,
-                unselectedItemColor: Colors.black,
-                type: BottomNavigationBarType.fixed,
-                selectedItemColor: color.color1,
-                onTap: (value) => model.onTappedBar(value),
-              ),
-            ),
-    );
+                );
+        });
   }
 
   Widget getViewForIndex(int index) {
