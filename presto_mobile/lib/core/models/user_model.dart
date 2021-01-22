@@ -8,7 +8,7 @@ class UserModel {
   bool contactVerified;
   String referredBy;
   List<dynamic> referredTo;
-  List<int> paymentMethodsUsed;
+  List<dynamic> paymentMethodsUsed;
 
   //Will Contain list of referral Codes of individuals whom he/she referred to.
   String referralCode;
