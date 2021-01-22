@@ -37,7 +37,7 @@ class _NotificationViewState extends State<NotificationView> {
                       radius: 60.0,
                       child: Text('Local Icon',
                           style:
-                          TextStyle(color: Colors.white, fontSize: 25.0)),
+                              TextStyle(color: Colors.white, fontSize: 25.0)),
                     ),
                     Column(
                       children: [
