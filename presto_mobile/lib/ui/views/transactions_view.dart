@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:presto_mobile/core/viewmodels/transactions_model.dart';
+import 'package:presto_mobile/core/viewModels/transactions_model.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
 
@@ -14,8 +14,8 @@ class _TransactionsViewState extends State<TransactionsView> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
 
-    return ViewModelBuilder<TransactionsModel>.reactive(
-      viewModelBuilder: () => TransactionsModel(),
+    return ViewModelBuilder<TransactionsViewModel>.reactive(
+      viewModelBuilder: () => TransactionsViewModel(),
       onModelReady: (model) => model.onReady(height, width),
       builder: (context, model, child) => model.isBusy
           ? Center(
@@ -50,7 +50,13 @@ class _TransactionsViewState extends State<TransactionsView> {
                         height: 20.0,
                       ),
                       Column(
-                        children: model.recentTransactions,
+                        children: model.recentTransactions.length > 0
+                            ? model.recentTransactions
+                            : [
+                                Container(
+                                  child: Text("No Transactions to Display"),
+                                ),
+                              ],
                       ),
                       SizedBox(
                         height: 20,
@@ -68,10 +74,13 @@ class _TransactionsViewState extends State<TransactionsView> {
                         height: 20,
                       ),
                       Column(
-                        children: model.lendList,
-                      ),
-                      Column(
-                        children: model.borrowList,
+                        children: model.allTransactions.length > 0
+                            ? model.allTransactions
+                            : [
+                                Container(
+                                  child: Text("No Transactions to Display"),
+                                ),
+                              ],
                       ),
                     ],
                   ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
@@ -19,6 +20,7 @@ class TransactionsViewModel extends BaseViewModel {
 
   var _height;
   var _width;
+  int duration;
   UserModel _user;
 
   get user => _user;
@@ -26,72 +28,83 @@ class TransactionsViewModel extends BaseViewModel {
   void onReady(var height, var width) async {
     print("Getting user in Transactions view !!!!!!!!!!!!!");
     setBusy(true);
-
-    // listenToDatabase();
+    duration = await _fireStoreService.getLimitsOnTransactionPage();
+    String code = await _preferencesService.getUserCode();
+    print("Got User Code");
+    await _fireStoreService.getUser(code).then((userData) async {
+      _user = userData;
+      print("Got User data");
+      notifyListeners();
+      fillLists();
+    });
     _height = height;
     _width = width;
-    print("Done initialising transactions model");
   }
-
-  void listenToDatabase() {
-    setBusy(true);
-    _fireStoreService
-        .listenToUserDocumentRealTime(_authenticationService.retrieveCode())
-        .listen((updateUser) {
-      if (updateUser != null) {
-        _user = updateUser;
-        notifyListeners();
-      }
-    });
-    setBusy(false);
-  }
-
-  List<String> name = [
-    "Anubhav Ajmera",
-    "Raghav",
-    "Kush Gupta",
-    "Shubham Jain",
-    "Saurabh"
-  ];
 
   List<Widget> recentTransactions = [];
   List<Widget> allTransactions = [];
 
-  void fillLists() {
-    _user.transactionIds.forEach((transactionId) async {
-      var transaction = await _fireStoreService.getTransaction(transactionId);
-      String status;
-      if (transaction != null && transaction is TransactionModel) {
-        //Fill the transaction in both all transactions list as well as if not completed in recent transactions list
-        if (transaction.lenderRecievedMoney) {
-          status = "Transaction Finished";
-        } else if (transaction.borrowerSentMoney) {
-          status = "Borrower sent money";
-        } else if (transaction.borrowerRecievedMoney) {
-          status = "Borrower Received money";
-        } else if (transaction.lenderSentMoney) {
-          status = "Lender Sent Money";
-        } else {
-          status = "No Transaction";
+  void fillLists() async {
+    print("getting transactions");
+    await _user.transactionIds.forEach(
+      (transactionId) async {
+        print(transactionId + "\n");
+        var transaction = await _fireStoreService.getTransaction(transactionId);
+        String status;
+        if (transaction != null && transaction is TransactionModel) {
+          //Fill the transaction in both all transactions list as well as if not completed in recent transactions list
+          if (transaction.lenderRecievedMoney) {
+            status = "Transaction Finished";
+          } else if (!transaction.borrowerRecievedMoney &&
+              !transaction.lenderSentMoney) {
+            status = "Send Money";
+          } else if (transaction.borrowerSentMoney) {
+            status = "Borrower sent money";
+          } else if (transaction.borrowerRecievedMoney) {
+            status = "Borrower Received money";
+          } else if (transaction.lenderSentMoney) {
+            status = "Lender Sent Money";
+          } else if (!transaction.borrowerRecievedMoney &&
+              !transaction.lenderSentMoney &&
+              transaction.approvedStatus) {
+            status = "Send Money";
+          } else {
+            status = "Lender Not Found";
+          }
+          Timestamp now = Timestamp.now();
+          DateTime today = now.toDate();
+          today = today.subtract(Duration(
+            days: 5,
+          ));
+          // Add
+          if (transaction.initiationDate.toDate().isAfter(today)) {
+            // i.e. is within 5 days
+            recentTransactions.add(
+              mixedCard(
+                transaction: transaction,
+                isBorrowed: _user.name == transaction.borrowerName ?? "",
+                height: _height,
+                width: _width,
+                status: status,
+                duration: 10,
+              ),
+            );
+          }
+          allTransactions.add(
+            mixedCard(
+              transaction: transaction,
+              isBorrowed: _user.name == transaction.borrowerName ?? "",
+              height: _height,
+              width: _width,
+              status: status,
+              duration: 10,
+            ),
+          );
+          //done filling the list
+          print("Done initialising transactions model");
+          setBusy(false);
         }
-        // Add
-
-      }
-    });
-    for (int i = 0; i < borrowed.length; i++) {
-      borrowList.add(
-        mixedCard(
-          borrowed[i].lenderName,
-          borrowed[i].amount,
-          _height,
-          _width,
-          borrowed[i].borrowerRecievedMoney &&
-              borrowed[i].borrowerSentMoney &&
-              borrowed[i].lenderRecievedMoney &&
-              borrowed[i].lenderSentMoney,
-          status,
-        ),
-      );
-    }
+      },
+    );
   }
 }

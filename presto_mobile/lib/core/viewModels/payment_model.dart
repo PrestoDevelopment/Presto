@@ -59,6 +59,7 @@ class PaymentModel extends BaseViewModel {
           amount: _amount.toInt().toString(),
           initiationDate: Timestamp.now(),
           transactionMethods: optionsSelected,
+          interestRate: 0.0,
         ),
       )
           .whenComplete(

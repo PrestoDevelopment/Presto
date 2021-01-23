@@ -1,4 +1,4 @@
-class Notification {
+class NotificationModel {
   final String borrowerName;
   final String amount;
   final List<int> paymentOptions;
@@ -6,7 +6,7 @@ class Notification {
   final String transactionId;
   final String score;
 
-  Notification({
+  NotificationModel({
     this.borrowerName,
     this.amount,
     this.paymentOptions,
@@ -15,7 +15,7 @@ class Notification {
     this.score,
   });
 
-  Notification.fromJson(Map<String, dynamic> json)
+  NotificationModel.fromJson(Map<String, dynamic> json)
       : transactionId = json['transactionId'],
         borrowerName = json['borrowerName'],
         amount = json['amount'],

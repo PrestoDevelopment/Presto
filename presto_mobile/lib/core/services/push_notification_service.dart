@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/notificationModel.dart';
@@ -20,7 +21,7 @@ class PushNotificationService {
       onMessage: (Map<String, dynamic> message) async {
         print("hELOOOOOOOOOOOOOOOO");
         print('onMessage: $message');
-        Notification notification = Notification.fromJson(message);
+        NotificationModel notification = NotificationModel.fromJson(message);
         _navigationService.navigateTo(NotificationViewRoute, false,
             arguments: notification);
       },
@@ -28,7 +29,7 @@ class PushNotificationService {
       // from the push notification directly
       onLaunch: (Map<String, dynamic> message) async {
         print("hELOOOOOOOOOOOOOOOO");
-        Notification notification = Notification.fromJson(message);
+        NotificationModel notification = NotificationModel.fromJson(message);
         _navigationService.navigateTo(NotificationViewRoute, false,
             arguments: notification);
       },
@@ -37,7 +38,7 @@ class PushNotificationService {
       onResume: (Map<String, dynamic> message) async {
         print('onMessage: $message');
         print("hELOOOOOOOOOOOOOOOO");
-        Notification notification = Notification.fromJson(message);
+        NotificationModel notification = NotificationModel.fromJson(message);
         _navigationService.navigateTo(NotificationViewRoute, false,
             arguments: notification);
       },

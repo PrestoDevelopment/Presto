@@ -23,6 +23,17 @@ class FireStoreService {
 
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
+
+  Future<int> getLimitsOnTransactionPage() async {
+    return await _limitCollectionReference.doc('limits').get().then((data) {
+      if (data.exists) {
+        return data.data()['recentTransactionDuration'];
+      } else {
+        return 10;
+      }
+    });
+  }
+
   Future createUser(UserModel userModel) async {
     try {
       print("creating User document in database");

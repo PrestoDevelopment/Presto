@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:presto_mobile/core/models/notificationModel.dart';
 import 'package:presto_mobile/core/viewModels/notification_model.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:stacked/stacked.dart';
 
 class NotificationView extends StatefulWidget {
-  final Notification notification;
+  final NotificationModel notification;
 
   NotificationView({this.notification});
 
@@ -17,8 +18,13 @@ class _NotificationViewState extends State<NotificationView> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    String paymentModes = '';
+    List<String> options = ['PayTm', 'GPay', 'UPI', 'PhonePay', 'PayPal'];
+    widget.notification.paymentOptions.forEach((element) {
+      paymentModes = paymentModes + options[element];
+    });
     return ViewModelBuilder.reactive(
-      viewModelBuilder: () => NotificationModel(),
+      viewModelBuilder: () => NotificationViewModel(),
       builder: (context, widget, child) {
         return SafeArea(
           child: Scaffold(
@@ -48,15 +54,11 @@ class _NotificationViewState extends State<NotificationView> {
                           ),
                         ),
                         Text(
-                          'Mode of payment:',
+                          'Mode of payment: $paymentModes',
                           style: TextStyle(
                             fontSize: 20.0,
                           ),
                         ),
-                        Container(
-                            height: height / 5,
-                            width: width / 4,
-                            child: Image.asset('assets/images/paytm.png')),
                       ],
                     )
                   ],
@@ -84,7 +86,7 @@ class _NotificationViewState extends State<NotificationView> {
                   child: Container(
                     width: width / 2,
                     child: Text(
-                      'A fellow Bitsian is calling...',
+                      'A fellow BITS\'ian is calling...',
                       style: TextStyle(
                         fontSize: 25.0,
                       ),

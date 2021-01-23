@@ -15,6 +15,7 @@ class TransactionModel {
   final bool borrowerSentMoney;
   final bool borrowerRecievedMoney;
   final List<int> transactionMethods;
+  final double interestRate;
 
   TransactionModel({
     this.transactionMethods,
@@ -31,6 +32,7 @@ class TransactionModel {
     this.borrowerSentMoney,
     this.lenderName,
     this.lenderRecievedMoney,
+    this.interestRate,
   });
   TransactionModel.fromJson(Map<String, dynamic> json)
       : transactionId = json['transactionId'],
@@ -46,10 +48,13 @@ class TransactionModel {
         borrowerRecievedMoney = json['borrowerRecievedMoney'],
         borrowerSentMoney = json['borrowerSentMoney'],
         lenderRecievedMoney = json['lenderRecievedMoney'],
+        interestRate = json['interestRate'],
         completionDate = json['completionDate'];
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'completionDate': completionDate,
+        'interestRate': interestRate,
         'borrowerReferralCode': borrowerReferralCode,
         'lenderReferralCode': lenderReferralCode,
         'approvedStatus': approvedStatus,
