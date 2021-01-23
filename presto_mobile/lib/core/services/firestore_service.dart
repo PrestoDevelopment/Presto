@@ -236,6 +236,16 @@ class FireStoreService {
     }
   }
 
+  Future updateTransaction(TransactionModel transaction) async {
+    try {
+      await _transactionsCollectionReference
+          .doc(transaction.transactionId)
+          .update(transaction.toJson());
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future getTransaction(String code) async {
     try {
       print("getting Transaction");

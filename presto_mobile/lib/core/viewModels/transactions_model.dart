@@ -100,6 +100,8 @@ class TransactionsViewModel extends BaseViewModel {
               );
               if (transaction.initiationDate.toDate().isAfter(defaultCase)) {
                 if (!transaction.isBorrowerPenalised) {
+                  transaction.isBorrowerPenalised = true;
+                  _fireStoreService.updateTransaction(transaction);
                   try {
                     user.personalScore = (double.parse(user.personalScore) -
                             durationsMap['decrementCreditScore'])

@@ -16,7 +16,7 @@ class TransactionModel {
   final bool borrowerRecievedMoney;
   final List<dynamic> transactionMethods;
   final double interestRate;
-  final bool isBorrowerPenalised;
+  bool isBorrowerPenalised;
 
   TransactionModel({
     this.isBorrowerPenalised,
