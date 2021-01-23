@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/ui/widgets/TransButton.dart';
+import 'package:intl/intl.dart';
 
 Widget mixedCard({
   TransactionModel transaction,
@@ -15,6 +16,9 @@ Widget mixedCard({
   transaction.transactionMethods.forEach((element) {
     paymentModes = paymentModes + options[element];
   });
+  String date = transaction.initiationDate.toDate().day.toString()
+    +'/'+transaction.initiationDate.toDate().month.toString()
+    +'/'+transaction.initiationDate.toDate().year.toString();
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     child: Card(
@@ -58,7 +62,7 @@ Widget mixedCard({
                 Padding(
                   padding: EdgeInsets.only(right: 20),
                   child: Text(
-                    transaction.initiationDate.toDate().toString(),
+                    date,
                   ),
                 ),
               ],

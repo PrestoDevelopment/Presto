@@ -91,7 +91,7 @@ class TransactionCardButton extends StatelessWidget {
           child: Center(
             child: Text(
               displayText,
-              style: TextStyle(fontSize: 20.0, color: Colors.white),
+              style: TextStyle(fontSize: 12.0, color: Colors.white),
             ),
           ),
         ),
