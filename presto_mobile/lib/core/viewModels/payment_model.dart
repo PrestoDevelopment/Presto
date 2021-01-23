@@ -60,6 +60,7 @@ class PaymentModel extends BaseViewModel {
           initiationDate: Timestamp.now(),
           transactionMethods: optionsSelected,
           interestRate: 0.0,
+          isBorrowerPenalised: false,
         ),
       )
           .whenComplete(

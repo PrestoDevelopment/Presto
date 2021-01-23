@@ -16,8 +16,10 @@ class TransactionModel {
   final bool borrowerRecievedMoney;
   final List<dynamic> transactionMethods;
   final double interestRate;
+  final bool isBorrowerPenalised;
 
   TransactionModel({
+    this.isBorrowerPenalised,
     this.transactionMethods,
     this.transactionId,
     this.initiationDate,
@@ -49,6 +51,7 @@ class TransactionModel {
         borrowerSentMoney = json['borrowerSentMoney'],
         lenderRecievedMoney = json['lenderRecievedMoney'],
         interestRate = json['interestRate'],
+        isBorrowerPenalised = json['isBorrowerPenalised'],
         completionDate = json['completionDate'];
 
   Map<String, dynamic> toJson() => {
@@ -62,6 +65,7 @@ class TransactionModel {
         'lenderSentMoney': lenderSentMoney,
         'lenderName': lenderName,
         'amount': amount,
+        'isBorrowerPenalised': isBorrowerPenalised,
         'transactionMethods': transactionMethods,
         'borrowerRecievedMoney': borrowerRecievedMoney,
         'borrowerSentMoney': borrowerSentMoney,

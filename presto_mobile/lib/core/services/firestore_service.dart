@@ -24,12 +24,26 @@ class FireStoreService {
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
 
-  Future<int> getLimitsOnTransactionPage() async {
+  Future<Map<String, dynamic>> getLimitsOnTransactionPage() async {
     return await _limitCollectionReference.doc('limits').get().then((data) {
       if (data.exists) {
-        return data.data()['recentTransactionDuration'];
+        var recentDurationLimit = data.data()['recentTransactionDuration'];
+        var defaultLimit = data.data()['defaultDurationLimit'];
+        var incrementCreditScore = data.data()['incrementCreditScore'];
+        var decrementCreditScore = data.data()['decrementCreditScore'];
+        return {
+          'recentDurationLimit': recentDurationLimit,
+          'defaultLimit': defaultLimit,
+          'incrementCreditScore': incrementCreditScore,
+          'decrementCreditScore': decrementCreditScore,
+        };
       } else {
-        return 10;
+        return {
+          'recentDurationLimit': 5,
+          'defaultLimit': 20,
+          'incrementCreditScore': 1,
+          'decrementCreditScore': 1,
+        };
       }
     });
   }

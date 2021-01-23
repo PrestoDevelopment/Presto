@@ -20,7 +20,7 @@ class TransactionsViewModel extends BaseViewModel {
 
   var _height;
   var _width;
-  int duration;
+  Map<String, dynamic> durationsMap;
   UserModel _user;
 
   get user => _user;
@@ -28,7 +28,7 @@ class TransactionsViewModel extends BaseViewModel {
   void onReady(var height, var width) async {
     print("Getting user in Transactions view !!!!!!!!!!!!!");
     setBusy(true);
-    duration = await _fireStoreService.getLimitsOnTransactionPage();
+    durationsMap = await _fireStoreService.getLimitsOnTransactionPage();
     String code = await _preferencesService.getUserCode();
     print("Got User Code");
     await _fireStoreService.getUser(code).then((userData) async {
@@ -50,7 +50,7 @@ class TransactionsViewModel extends BaseViewModel {
         print(transactionId + "\n");
         await _fireStoreService
             .getTransaction(transactionId)
-            .then((transaction) {
+            .then((transaction) async {
           String status;
           if (transaction != null && transaction is TransactionModel) {
             print("Confirming transaction fetch");
@@ -73,13 +73,19 @@ class TransactionsViewModel extends BaseViewModel {
             } else {
               status = "Lender Not Found";
             }
+
             Timestamp now = Timestamp.now();
             DateTime today = now.toDate();
-            today = today.subtract(Duration(
-              days: 5,
+            DateTime defaultCase;
+            DateTime recentCase;
+            recentCase = today.subtract(Duration(
+              days: durationsMap["recentDurationLimit"],
+            ));
+            defaultCase = today.subtract(Duration(
+              days: durationsMap["defaultLimit"],
             ));
             // Add
-            if (transaction.initiationDate.toDate().isAfter(today)) {
+            if (transaction.initiationDate.toDate().isAfter(recentCase)) {
               // i.e. is within 5 days
               print("Adding in Recent Transaction List");
               recentTransactions.add(
@@ -92,6 +98,21 @@ class TransactionsViewModel extends BaseViewModel {
                   duration: 10,
                 ),
               );
+              if (transaction.initiationDate.toDate().isAfter(defaultCase)) {
+                if (!transaction.isBorrowerPenalised) {
+                  //TODO:Anubhav idar http Request daalde
+                  try {
+                    user.personalScore = (double.parse(user.personalScore) -
+                            durationsMap['decrementCreditScore'])
+                        .toString();
+                    await _fireStoreService.userDocUpdate(user).then((val) {
+                      //TODO: Anubhav idar vo firestore mai update horaha hai current user ka personal score bas idar se aage dekhle
+                    });
+                  } catch (e) {
+                    print(e.toString());
+                  }
+                }
+              }
             }
             print("Adding in All Transaction List");
             allTransactions.add(
