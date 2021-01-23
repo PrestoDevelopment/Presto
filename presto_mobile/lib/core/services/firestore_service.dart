@@ -118,13 +118,10 @@ class FireStoreService {
   }
 
   Future userDocUpdate(UserModel user) async {
-    var result = await _userCollectionReference.doc(user.referralCode).get();
-    print("Getting parent Document");
+    print("Updating Document");
     try {
-      if (result.exists) {
-        _userCollectionReference.doc(user.referralCode).update(user.toJson());
-        return true;
-      }
+      _userCollectionReference.doc(user.referralCode).update(user.toJson());
+      return true;
     } catch (e) {
       if (e is PlatformException) {
         print("@@@@@@@@@@@@@@@@@@@");
@@ -256,6 +253,25 @@ class FireStoreService {
       print(e.toString());
       if (e is PlatformException) return e.message;
       return e.toString();
+    }
+  }
+
+  Future syncCommunityScore(String parentCode) async {
+    try {
+      UserModel parent = await getUser(parentCode);
+      double childDeductedBy = 1;
+      while (parent.referredBy != "CM01") {
+        childDeductedBy = childDeductedBy / (2 * parent.referredTo.length);
+        parent.communityScore =
+            (double.parse(parent.communityScore) - childDeductedBy).toString();
+        await userDocUpdate(parent);
+        if (parent.referredBy == "CM01")
+          break;
+        else
+          parent = await getUser(parent.referredBy);
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

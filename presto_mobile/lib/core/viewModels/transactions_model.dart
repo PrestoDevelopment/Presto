@@ -100,16 +100,20 @@ class TransactionsViewModel extends BaseViewModel {
               );
               if (transaction.initiationDate.toDate().isAfter(defaultCase)) {
                 if (!transaction.isBorrowerPenalised) {
-                  //TODO:Anubhav idar http Request daalde
                   try {
                     user.personalScore = (double.parse(user.personalScore) -
                             durationsMap['decrementCreditScore'])
                         .toString();
-                    await _fireStoreService.userDocUpdate(user).then((val) {
-                      //TODO: Anubhav idar vo firestore mai update horaha hai current user ka personal score bas idar se aage dekhle
+                    await _fireStoreService
+                        .userDocUpdate(user)
+                        .then((val) async {
+                      await _fireStoreService
+                          .syncCommunityScore(user.referredBy);
                     });
                   } catch (e) {
-                    print(e.toString());
+                    print(
+                      e.toString(),
+                    );
                   }
                 }
               }
