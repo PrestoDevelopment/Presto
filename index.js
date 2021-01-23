@@ -19,7 +19,7 @@ const notification_options = {
 //initialize admin SDK using serciceAcountKey
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://presto-3013d.firebaseio.com",
+  databaseURL: "https://presto2-default-rtdb.firebaseio.com/" // "https://presto-3013d.firebaseio.com",
 });
 
 const db = admin.firestore();
@@ -54,7 +54,7 @@ app.post("/firebase/notification/", (req, res) => {
 
   const message = {
     notification: {
-      title: "username",
+      title: "Someone is looking for you",
       body: "Want to go in your cab",
     },
   };
@@ -64,19 +64,13 @@ app.post("/firebase/notification/", (req, res) => {
   data.doc(userCode)
     .get()
     .then((snapshot) => {
-      var object = {};
-      object = snapshot.data()["jsonData"];
-      console.log(object);
-      var jsonObject = JSON.parse(object);
-      var referredTo = jsonObject["referredTo"];
+      var referredTo = snapshot.data()["referredTo"];
       console.log(referredTo);
       referredTo.forEach((id) => {
         const data = db.collection("users");
         data.doc(id)
           .get().then((snapshot) => {
-            var user = snapshot.data()["jsonData"];
-            var json = JSON.parse(user);
-            var token = json["notificationToken"];
+            var token = snapshot.data()["notificationToken"];
             console.log(token);
             admin
             .messaging()
@@ -88,6 +82,37 @@ app.post("/firebase/notification/", (req, res) => {
               console.log(error);
             });
           });
+      });
+    });
+
+    data.doc(userCode)
+    .get()
+    .then((snapshot) => {
+      var referredBy = snapshot.data()["referredBy"];
+      console.log(referredBy);
+      data.doc(referredBy)
+      .get()
+      .then((snapshot) => {
+        var referredTo;
+        referredTo = snapshot.data()["referredTo"];
+        console.log(referredTo);
+        referredTo.forEach((id) => {
+          const data = db.collection("users");
+          data.doc(id)
+            .get().then((snap) => {
+              var token = snap.data()["notificationToken"];
+              console.log(token);
+              admin
+              .messaging()
+              .sendToDevice(token, message, options)
+              .then((response) => {
+                res.status(200).send("Notification sent successfully");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            });
+        });
       });
     });
 });
