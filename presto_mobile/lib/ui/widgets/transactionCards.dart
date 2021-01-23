@@ -42,6 +42,7 @@ Widget mixedCard({
             tranStatus: status,
             height: height,
             width: width,
+            transaction: transaction,
           ),
           children: <Widget>[
             SizedBox(

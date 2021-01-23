@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:presto_mobile/core/viewModels/transactions_model.dart';
+import 'package:presto_mobile/core/viewModels/transactions_view_model.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
 

@@ -10,7 +10,7 @@ import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 import '../../locator.dart';
 import '../models/user_model.dart';
 
-// ignore: camel_case_types
+// ignore:_case_types
 class FireStoreService {
   final CollectionReference _userCollectionReference =
       FirebaseFirestore.instance.collection('users');
@@ -282,6 +282,17 @@ class FireStoreService {
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  void changeBoolPaymentReceived(
+      TransactionModel transaction, bool paymentReceivedByBorrower) async {
+    if (paymentReceivedByBorrower) {
+      transaction.borrowerRecievedMoney = true;
+      await updateTransaction(transaction);
+    } else {
+      transaction.lenderRecievedMoney = true;
+      await updateTransaction(transaction);
     }
   }
 }

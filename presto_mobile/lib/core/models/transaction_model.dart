@@ -8,12 +8,12 @@ class TransactionModel {
   final String borrowerReferralCode;
   final Timestamp completionDate;
   final String borrowerName;
-  final bool lenderSentMoney;
+  bool lenderSentMoney;
   final String lenderName;
   final String amount;
-  final bool lenderRecievedMoney;
-  final bool borrowerSentMoney;
-  final bool borrowerRecievedMoney;
+  bool lenderRecievedMoney;
+  bool borrowerSentMoney;
+  bool borrowerRecievedMoney;
   final List<dynamic> transactionMethods;
   final double interestRate;
   bool isBorrowerPenalised;
