@@ -40,6 +40,8 @@ Widget mixedCard({
           ),
           trailing: TransactionCardButton(
             tranStatus: status,
+            height: height,
+            width: width,
           ),
           children: <Widget>[
             SizedBox(

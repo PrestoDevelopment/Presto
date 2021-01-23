@@ -227,10 +227,11 @@ class FireStoreService {
 
   Future getTransaction(String code) async {
     try {
-      print("getting Data about user");
+      print("getting Transaction");
       var data = await _transactionsCollectionReference.doc(code).get();
-      if (data.exists) {
+      if (data.data() != null) {
         TransactionModel transaction = TransactionModel.fromJson(data.data());
+        print("Got Transaction");
         return transaction;
       } else
         return PlatformException(
@@ -238,6 +239,7 @@ class FireStoreService {
           code: null,
         );
     } catch (e) {
+      print(e.toString());
       if (e is PlatformException) return e.message;
       return e.toString();
     }
