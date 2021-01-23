@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 import 'package:presto_mobile/ui/widgets/TransButton.dart';
 
 Widget borrowCard(n, a, b) {
@@ -127,7 +126,7 @@ Widget mixedCard(n, a, height, width, boolean, status) {
                     padding: EdgeInsets.only(left: 20),
                     child: Text("Payment Mode:")),
                 Padding(
-                    padding: EdgeInsets.only(right: 20), child: Text("Paytm"))
+                    padding: EdgeInsets.only(right: 20), child: Text("PayTm"))
               ],
             ),
             Row(

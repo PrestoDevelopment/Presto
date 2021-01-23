@@ -1,15 +1,22 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart';
-import 'package:file_picker/file_picker.dart';
+
 class TransButton extends StatelessWidget {
   final String tranStatus;
+  final double height;
+  final double width;
 
-  TransButton({this.tranStatus});
+  TransButton({
+    this.tranStatus,
+    this.height,
+    this.width,
+  });
 
-  Future TransButtonTap() async {
+  Future TransactionButtonTap() async {
     FilePickerResult result = await FilePicker.platform.pickFiles();
 
-    if(result != null) {
+    if (result != null) {
       PlatformFile file = result.files.first;
 
       print(file.name);
@@ -24,26 +31,26 @@ class TransButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
     String displayText;
 
-    switch(tranStatus){
-      case "No Transaction" : displayText = "Confirm Sent!";
-      break;
-      case "Lender Sent Money" : displayText = "Confirm Receive";
-      break;
-      case "Borrower Recieved money" : displayText = "Payback Now!";
-      break;
-      case "Borrower sent money" : displayText = "Confirm Payback";
-      break;
-      default : displayText = null;
-
+    switch (tranStatus) {
+      case "No Transaction":
+        displayText = "Confirm Sent!";
+        break;
+      case "Lender Sent Money":
+        displayText = "Confirm Receive";
+        break;
+      case "Borrower Received money":
+        displayText = "Payback Now!";
+        break;
+      case "Borrower sent money":
+        displayText = "Confirm Payback";
+        break;
+      default:
+        displayText = null;
     }
 
-    if(displayText!=null){
+    if (displayText != null) {
       return GestureDetector(
         child: Container(
           height: height / 17,
@@ -56,11 +63,10 @@ class TransButton extends StatelessWidget {
             ),
           ),
         ),
-        onTap: TransButtonTap,
+        onTap: TransactionButtonTap,
       );
-    }else{
+    } else {
       return null;
     }
-
   }
 }

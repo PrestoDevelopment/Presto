@@ -213,4 +213,22 @@ class FireStoreService {
       }
     }
   }
+
+  Future getTransaction(String code) async {
+    try {
+      print("getting Data about user");
+      var data = await _transactionsCollectionReference.doc(code).get();
+      if (data.exists) {
+        TransactionModel transaction = TransactionModel.fromJson(data.data());
+        return transaction;
+      } else
+        return PlatformException(
+          message: "Transaction d\'ont Exist",
+          code: null,
+        );
+    } catch (e) {
+      if (e is PlatformException) return e.message;
+      return e.toString();
+    }
+  }
 }
