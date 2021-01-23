@@ -70,7 +70,7 @@ class SignUpModel extends BaseViewModel {
           referredBy: parentReferralCode,
           referralCode: newReferralCode,
           referredTo: [],
-          communityScore: '0',
+          communityScore: '5',
           personalScore: '0',
           contactVerified: false,
           emailVerified: false,
