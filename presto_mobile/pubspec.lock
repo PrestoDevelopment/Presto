@@ -288,7 +288,7 @@ packages:
       name: get_it
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.4"
+    version: "5.0.6"
   google_api_availability:
     dependency: transitive
     description:
@@ -316,7 +316,7 @@ packages:
       name: google_maps_flutter_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.1.0"
   http:
     dependency: transitive
     description:
@@ -407,7 +407,7 @@ packages:
       name: observable_ish
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.5"
   otp_text_field:
     dependency: "direct main"
     description:
@@ -519,7 +519,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.2+3"
+    version: "4.3.3"
   quiver:
     dependency: transitive
     description:
@@ -582,14 +582,14 @@ packages:
       name: shared_preferences_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1+3"
+    version: "0.0.2+2"
   simple_animations:
     dependency: "direct main"
     description:
       name: simple_animations
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.2"
+    version: "2.5.0"
   sky_engine:
     dependency: transitive
     description: flutter

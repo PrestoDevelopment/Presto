@@ -8,6 +8,8 @@ import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 import 'package:presto_mobile/core/viewmodels/login_model.dart';
 import 'package:presto_mobile/core/viewmodels/signup_model.dart';
 
+import 'core/services/push_notification_service.dart';
+
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
@@ -24,6 +26,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => AnalyticsService());
   locator.registerLazySingleton(() => SharedPreferencesService());
   // locator.registerLazySingleton(() => FireStoreService());
+  locator.registerLazySingleton(() => PushNotificationService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
 }
