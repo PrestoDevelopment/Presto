@@ -9,7 +9,7 @@ class MainPageModel extends BaseViewModel {
     'HomePage',
     'TransactionsPage',
   ];
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   get pageID => _pageID;
 
