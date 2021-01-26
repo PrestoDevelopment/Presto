@@ -5,6 +5,8 @@ import 'package:presto_mobile/ui/widgets/busybutton.dart';
 import 'package:presto_mobile/ui/widgets/paymentCard.dart';
 import 'package:stacked/stacked.dart';
 
+import '../resources/Colors.dart';
+
 class PaymentView extends StatefulWidget {
   final double amount;
 
@@ -52,7 +54,24 @@ class _PaymentViewState extends State<PaymentView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        height: height / 15,
+                        height: height / 45,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: (){model.returnTap();},
+                            child: Icon(
+                              Icons.arrow_back,
+                              size: 40.0,
+                              color: color1,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height / 45,
                       ),
                       Container(
                         height: height / 7,

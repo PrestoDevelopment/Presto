@@ -177,7 +177,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     '₹ ${model.user?.totalBorrowed ?? '0'}',
                               ),
                               ListToken(
-                                name: 'Total Amount Lended',
+                                name: 'Total Amount Lent',
                                 icon: Icons.monetization_on,
                                 trailName: '₹ ${model.user?.totalLent ?? '0'}',
                               ),
