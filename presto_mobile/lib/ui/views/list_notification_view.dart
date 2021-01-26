@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewModels/list_notification_model.dart';
+import 'package:presto_mobile/ui/widgets/notificationListCard.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
 
@@ -35,7 +36,7 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 30.0,
+                          height: height/20,
                         ),
                         Align(
                           alignment: Alignment.topCenter,
@@ -43,10 +44,14 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                             'All Notifications',
                             style: TextStyle(
                               color: color1,
-                              fontSize: 20.0
+                              fontSize: 30.0
                             ),
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          height: height/30,
+                        ),
+                        notificationListCard(),
                       ],
                     ),
                   )

@@ -4,6 +4,7 @@ import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/locator.dart';
+import '../models/user_model.dart';
 import '../services/authentication_service.dart';
 import '../services/firestore_service.dart';
 
@@ -15,7 +16,9 @@ class ListNotificationModel extends StreamViewModel{
 
   bool get hasUserData => dataReady;
 
+  UserModel get user => data;
+
   @override
-  // TODO: implement stream
-  Stream get stream => throw UnimplementedError();
+  Stream get stream => _fireStoreService
+      .listenToUserDocumentRealTime(_authenticationService.retrieveCode());
 }

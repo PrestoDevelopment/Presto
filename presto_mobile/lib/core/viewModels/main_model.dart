@@ -8,8 +8,9 @@ class MainPageModel extends BaseViewModel {
     'ProfilePage',
     'HomePage',
     'TransactionsPage',
+    'ListNotificationPage'
   ];
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   get pageID => _pageID;
 
