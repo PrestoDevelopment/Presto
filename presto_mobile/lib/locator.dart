@@ -26,7 +26,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => AnalyticsService());
   locator.registerLazySingleton(() => SharedPreferencesService());
   // locator.registerLazySingleton(() => FireStoreService());
-  locator.registerLazySingleton(() => PushNotificationService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
 }

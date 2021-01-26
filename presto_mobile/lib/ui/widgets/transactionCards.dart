@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/ui/widgets/TransButton.dart';
-import 'package:intl/intl.dart';
 
 Widget mixedCard({
   TransactionModel transaction,
@@ -14,11 +13,13 @@ Widget mixedCard({
   String paymentModes = '';
   List<String> options = ['PayTm', 'GPay', 'UPI', 'PhonePay', 'PayPal'];
   transaction.transactionMethods.forEach((element) {
-    paymentModes = paymentModes + options[element];
+    paymentModes = paymentModes + options[element] + ', ';
   });
-  String date = transaction.initiationDate.toDate().day.toString()
-    +'/'+transaction.initiationDate.toDate().month.toString()
-    +'/'+transaction.initiationDate.toDate().year.toString();
+  String date = transaction.initiationDate.toDate().day.toString() +
+      '/' +
+      transaction.initiationDate.toDate().month.toString() +
+      '/' +
+      transaction.initiationDate.toDate().year.toString();
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     child: Card(
@@ -27,9 +28,11 @@ Widget mixedCard({
         padding: EdgeInsets.only(top: 6.0, left: 6.0, right: 6.0, bottom: 6.0),
         child: ExpansionTile(
           title: Text(
-            isBorrowed
-                ? transaction.lenderName ?? "Failed"
-                : transaction.borrowerName ?? "Failed",
+            transaction.approvedStatus
+                ? isBorrowed
+                    ? transaction.lenderName
+                    : transaction.borrowerName
+                : "Failed",
             style: TextStyle(
               fontSize: 20,
               color: !isBorrowed ? Colors.green : Colors.red,

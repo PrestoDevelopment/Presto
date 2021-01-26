@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/notificationModel.dart';

@@ -91,7 +91,8 @@ class TransactionsViewModel extends BaseViewModel {
               recentTransactions.add(
                 mixedCard(
                   transaction: transaction,
-                  isBorrowed: user.name == transaction.borrowerName ?? "",
+                  isBorrowed:
+                      user.name == transaction.borrowerName ? true : false,
                   height: _height,
                   width: _width,
                   status: status,
@@ -124,7 +125,8 @@ class TransactionsViewModel extends BaseViewModel {
             allTransactions.add(
               mixedCard(
                 transaction: transaction,
-                isBorrowed: user.name == transaction.borrowerName ?? "",
+                isBorrowed:
+                    user.name == transaction.borrowerName ? true : false,
                 height: _height,
                 width: _width,
                 status: status,

@@ -4,7 +4,7 @@ import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
-
+import 'package:presto_mobile/core/services/navigation_service.dart';
 // import 'package:presto_mobile/core/viewmodels/otp_model.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
 
@@ -20,8 +20,10 @@ class OtpVerificationView extends StatefulWidget {
 class _OtpVerificationViewState extends State<OtpVerificationView> {
   final FireStoreService _fireStoreService = FireStoreService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  NavigationService _navigationService = NavigationService();
   String verificationID; // Contains the verification ID
   AuthCredential userCredential;
+  String status;
 
   Future verifyPhone() async {
     //Defining few methods first
@@ -32,7 +34,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
         print("--------");
         print("Phone Code Sent");
         print("--------");
-
+        status = "Phone Code Sent";
         verificationID =
             verID; //verification ID is set to actual ID that is provided when Phone Code is Sent
       });
@@ -43,6 +45,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
       setState(() {
         verificationID =
             verID; //verification ID is set to actual ID that is provided when Phone Code is Sent
+        status = "Phone code auto retrieval time out";
       });
     };
 
@@ -50,6 +53,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
         (FirebaseAuthException e) {
       setState(() {
         print(e.message);
+        status = "Verification fail";
       });
     };
 
@@ -58,6 +62,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
       setState(() {
         userCredential = credential;
         print(credential.providerId.toLowerCase());
+        status = "verification cocmpleted";
       });
     };
 
@@ -86,11 +91,12 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
         }
         setState(() {
           widget.user.contactVerified = true;
+          status = "manual signin";
         });
         var result = await _fireStoreService.userDocUpdate(widget.user);
         if (result is bool) {
           if (result)
-            Navigator.pop(context);
+            _navigationService.pop();
           else
             print("Error 2");
         } else
@@ -107,7 +113,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
         var result = await _fireStoreService.userDocUpdate(widget.user);
         if (result is bool) {
           if (result)
-            Navigator.pop(context);
+            _navigationService.pop();
           else
             print("Error 2");
         } else
@@ -223,6 +229,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 4,
             ),
+            Text(status),
           ],
         ),
       ),
