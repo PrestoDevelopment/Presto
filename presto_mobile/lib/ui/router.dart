@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/notificationModel.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
+import 'package:presto_mobile/ui/views/list_notification_view.dart';
 import 'package:presto_mobile/ui/views/login_view.dart';
 import 'package:presto_mobile/ui/views/main_view.dart';
 import 'package:presto_mobile/ui/views/notification_view.dart';
@@ -33,6 +34,11 @@ Route<dynamic> customRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: LoginView(),
+      );
+    case ListNotificationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ListNotificationView(),
       );
     case OtpViewRoute:
       var user = settings.arguments;
