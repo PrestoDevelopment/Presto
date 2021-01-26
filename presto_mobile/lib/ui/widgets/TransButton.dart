@@ -2,18 +2,22 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
+import 'package:presto_mobile/managers/trans_card_manager.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart';
 
+// ignore: must_be_immutable
 class TransactionCardButton extends StatelessWidget {
   final String tranStatus;
   final double height;
   final double width;
+  final String userTargeted;
   TransactionModel transaction;
 
   TransactionCardButton({
     this.tranStatus,
     this.height,
     this.width,
+    this.userTargeted,
     this.transaction,
   });
 
@@ -31,55 +35,18 @@ class TransactionCardButton extends StatelessWidget {
     }
   }
 
+  TransCardManager _cardManager = TransCardManager();
+
   FireStoreService _fireStoreService = FireStoreService();
 
   @override
   Widget build(BuildContext context) {
     String displayText;
     Function onTap;
-    switch (tranStatus) {
-      case "Transaction Finished":
-        displayText = "Transaction Complete!";
-        onTap = () {
-          //Do Nothing
-        };
-        break;
-      case "Lender Sent Money":
-        displayText = "Confirm Receive";
-        onTap = () async {
-          //pop Confirmation dialog box and if yes change firebase bool value
-          await _fireStoreService.changeBoolPaymentReceived(
-            transaction,
-            false,
-          );
-        };
-        break;
-      case "Borrower Received money":
-        displayText = "Payback Now!";
-        onTap = () async {
-          await transactionButtonTap();
-        };
-        break;
-      case "Send Money":
-        displayText = "Confirm Transaction";
-        onTap = () async {
-          await transactionButtonTap();
-        };
-        break;
-      case "Borrower sent money":
-        displayText = "Confirm Payback";
-        onTap = () async {
-          //pop Confirmation dialog box and if yes change firebase bool value
-          await _fireStoreService.changeBoolPaymentReceived(
-            transaction,
-            true,
-          );
-        };
-        break;
-      default:
-        displayText = "Transaction Failed";
-        onTap = () {};
-        break;
+    if(tranStatus!="Lender Not Found"){
+      _cardManager.setTargetUser(userTargeted);
+      _cardManager.setStatus(tranStatus);
+      displayText = _cardManager.getRefinedStatus();
     }
 
     if (displayText != null) {

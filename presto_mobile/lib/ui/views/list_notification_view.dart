@@ -51,7 +51,7 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                         SizedBox(
                           height: height/30,
                         ),
-                        notificationListCard(),
+                        notificationListCard(height,width),
                       ],
                     ),
                   )

@@ -47,6 +47,7 @@ Widget mixedCard({
             height: height,
             width: width,
             transaction: transaction,
+            userTargeted: isBorrowed ? 'Borrower' : 'Lender',
           ),
           children: <Widget>[
             SizedBox(
