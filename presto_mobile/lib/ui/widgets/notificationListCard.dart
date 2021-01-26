@@ -4,7 +4,7 @@ import 'package:presto_mobile/ui/widgets/TransButton.dart';
 
 import '../resources/Colors.dart';
 
-Widget notificationListCard(){
+Widget notificationListCard(var height, var width){
   return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0,horizontal: 10.0),
     child: Card(
@@ -114,7 +114,7 @@ Widget notificationListCard(){
                     children: [
                       GestureDetector(
                         child: Container(
-                          //width: MediaQuery.of(context).size.width/20,
+                          width: width/10,
                           color: Colors.green,
                           child: Center(
                             child: Text(
@@ -132,6 +132,7 @@ Widget notificationListCard(){
                       ),
                       GestureDetector(
                         child: Container(
+                          width: width/10,
                           color: Colors.red,
                           child: Center(
                             child: Text(
