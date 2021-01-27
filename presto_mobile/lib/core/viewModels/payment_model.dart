@@ -101,4 +101,10 @@ class PaymentModel extends BaseViewModel {
       );
     setBusy(false);
   }
+
+  void returnTap(){
+    _navigationService.navigateTo("HomeView", true);
+    _navigationService.pop();
+  }
+
 }
