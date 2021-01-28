@@ -41,23 +41,6 @@ class ProfileModel extends StreamViewModel {
     }
   }
 
-  void emailVeriPop() {
-    // _authenticationService.;
-    if (user.emailVerified)
-      _dialogService.showDialog(
-        title: "Email Verification",
-        description: "Your Email Is Verified",
-      );
-    else {
-      _dialogService.showDialog(
-        title: "Email Verification",
-        description:
-            "A verification email has been sent to registered Email, Please verify",
-      );
-      _authenticationService.verifyEmail(user);
-    }
-  }
-
   Future signOut() async {
     bool sure = await _authenticationService.signOut();
     if (sure) await _navigateToLogin();
