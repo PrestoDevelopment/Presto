@@ -68,7 +68,10 @@ class TransactionCardButton extends StatelessWidget {
         onTap: onTap,
       );
     } else {
-      return null;
+      return Icon(
+        Icons.arrow_drop_down,
+        color: Colors.black,
+      );
     }
   }
 }
