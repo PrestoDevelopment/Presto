@@ -7,3 +7,4 @@ const String OtpViewRoute = "Otp";
 const String NotificationViewRoute = "NotificationView";
 const String PaymentViewRoute = "PaymentPage";
 const String ListNotificationViewRoute = "ListNotificationView";
+const String EmailVerificationRoute = "EmailVerificationView";

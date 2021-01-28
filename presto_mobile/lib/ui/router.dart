@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/notificationModel.dart';
+import 'package:presto_mobile/ui/views/email_verification_view.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
 import 'package:presto_mobile/ui/views/list_notification_view.dart';
 import 'package:presto_mobile/ui/views/login_view.dart';
@@ -47,6 +48,11 @@ Route<dynamic> customRoute(RouteSettings settings) {
         viewToShow: OtpVerificationView(
           user: user,
         ),
+      );
+    case EmailVerificationRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: EmailVerificationView(),
       );
     //For passing arguements
     case SignupViewRoute:

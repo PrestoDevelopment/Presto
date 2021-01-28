@@ -40,23 +40,9 @@ class _ProfileViewState extends State<ProfileView> {
                     drawer: Container(
                       color: Colors.white,
                       child: SideNavDrawer(
-                        contactVerificationColor: model.user.contactVerified
-                            ? Colors.green
-                            : Colors.red,
-                        emailVerificationColor: model.user.emailVerified
-                            ? Colors.green
-                            : Colors.red,
-                        emailVeriTap: () {
-                          if (!model.user.emailVerified) model.emailVeriPop();
-                        },
                         logoutTap: () {
                           //Sign Out
                           model.signOut();
-                        },
-                        phoneVeritap: () {
-                          print(model.user.contactVerified);
-                          if (!model.user.contactVerified)
-                            model.navigateToOtp();
                         },
                         shareTap: () {
                           final RenderBox box = context.findRenderObject();
