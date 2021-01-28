@@ -40,8 +40,6 @@ class TransactionCardButton extends StatelessWidget {
 
 
   TransCardManager _cardManager = TransCardManager();
-  DialogService _dialogService = locator<DialogService>();
-  FireStoreService _fireStoreService = FireStoreService();
 
   @override
   Widget build(BuildContext context) {

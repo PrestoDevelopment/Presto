@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/profile_model.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
-import 'package:presto_mobile/ui/widgets/SideNavDrawer.dart';
 import 'package:presto_mobile/ui/widgets/listToken.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:share/share.dart';
@@ -37,23 +36,6 @@ class _ProfileViewState extends State<ProfileView> {
                   child: Scaffold(
                     key: scaffoldKey,
                     backgroundColor: Colors.white,
-                    drawer: Container(
-                      color: Colors.white,
-                      child: SideNavDrawer(
-                        logoutTap: () {
-                          //Sign Out
-                          model.signOut();
-                        },
-                        shareTap: () {
-                          final RenderBox box = context.findRenderObject();
-                          Share.share(
-                              "Hey! I cordially invite you to join the RVCEians United community which will enable you to borrow small amount of money, interest free. You can borrow up to 500-2500 Rs from your community through this platform. Excited to welcome you to the community. Please enter this referral code ${model.user.referralCode}",
-                              subject: "Download New Presto Mobile App Now!!",
-                              sharePositionOrigin:
-                                  box.localToGlobal(Offset.zero) & box.size);
-                        },
-                      ),
-                    ),
                     body: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
@@ -79,16 +61,8 @@ class _ProfileViewState extends State<ProfileView> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 12.0, top: 5.0),
-                                        child: IconButton(
-                                          color: Colors.white,
-                                          icon: Icon(Icons.menu),
-                                          onPressed: () => scaffoldKey
-                                              .currentState
-                                              .openDrawer(),
-                                        ),
+                                      SizedBox(
+                                        height: height/30,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -120,6 +94,46 @@ class _ProfileViewState extends State<ProfileView> {
                                               color: Colors.white),
                                         ),
                                       ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              top: 8.0,
+                                              left: 14.0,
+                                            ),
+                                            child: IconButton(
+                                                icon: Icon(
+                                                  Icons.power_settings_new,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () {
+                                                  //Sign Out
+                                                  model.signOut();
+                                                },
+                                            )
+                                          ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                left: 5.0,
+                                                top: 8.0,
+                                              ),
+                                            child: IconButton(
+                                              icon: Icon(
+                                                Icons.share,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                final RenderBox box = context.findRenderObject();
+                                                Share.share(
+                                                    "Hey! I cordially invite you to join the RVCEians United community which will enable you to borrow small amount of money, interest free. You can borrow up to 500-2500 Rs from your community through this platform. Excited to welcome you to the community. Please enter this referral code ${model.user.referralCode}",
+                                                    subject: "Download New Presto Mobile App Now!!",
+                                                    sharePositionOrigin:
+                                                    box.localToGlobal(Offset.zero) & box.size);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   ),
                                   Padding(
