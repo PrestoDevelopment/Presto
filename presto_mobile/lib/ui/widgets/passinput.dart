@@ -18,9 +18,10 @@ class PassInput extends StatefulWidget {
 }
 
 class _PassInputState extends State<PassInput> {
+  bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
-    bool obscureText = true;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -62,18 +63,19 @@ class _PassInputState extends State<PassInput> {
             hintText: widget.hintText ?? "",
             hintStyle: TextStyle(
               fontSize: 18,
-              color: Colors.grey[400],
+              color: Colors.grey[800],
             ),
             hintMaxLines: 1,
             suffixIcon: IconButton(
               icon: Icon(
                 !obscureText ? Icons.visibility : Icons.visibility_off,
-                color: Colors.grey[400],
+                color: Colors.grey[800],
                 size: 18,
               ),
               onPressed: () {
                 setState(() {
                   obscureText = !obscureText;
+                  print("Changing obscure bool");
                 });
               },
             ),
