@@ -3,6 +3,7 @@ import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/notificationModel.dart';
 import 'package:presto_mobile/ui/views/email_verification_view.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
+import 'package:presto_mobile/ui/views/infoSlider.dart';
 import 'package:presto_mobile/ui/views/list_notification_view.dart';
 import 'package:presto_mobile/ui/views/login_view.dart';
 import 'package:presto_mobile/ui/views/main_view.dart';
@@ -54,9 +55,9 @@ Route<dynamic> customRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: EmailVerificationView(),
       );
-    //For passing arguements
+  //For passing arguments
     case SignupViewRoute:
-      // var abc = settings.arguements
+    // var abc = settings.arguments
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: SignUpView(),
@@ -69,6 +70,11 @@ Route<dynamic> customRoute(RouteSettings settings) {
           notification: notification,
         ),
       );
+    case InfoSliderViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: InfoSlider(),
+      );
     case PaymentViewRoute:
       var data = settings.arguments;
       return _getPageRoute(
@@ -77,9 +83,16 @@ Route<dynamic> customRoute(RouteSettings settings) {
           amount: data,
         ),
       );
+    case InfoSliderRoute:
+      print("Going to InfoSlider");
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: InfoSlider(),
+      );
     default:
       var message = settings.arguments;
       print(message.runtimeType);
+      print(message.toString());
       return MaterialPageRoute(
         builder: (_) => Scaffold(
           backgroundColor: Colors.white,
@@ -94,9 +107,11 @@ Route<dynamic> customRoute(RouteSettings settings) {
 }
 
 PageRoute _getPageRoute({String routeName, Widget viewToShow}) {
+  print("Creating a Material Page Route");
   return MaterialPageRoute(
-      settings: RouteSettings(
-        name: routeName,
-      ),
-      builder: (_) => viewToShow);
+    settings: RouteSettings(
+      name: routeName,
+    ),
+    builder: (_) => viewToShow,
+  );
 }

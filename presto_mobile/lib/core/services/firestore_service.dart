@@ -23,6 +23,13 @@ class FireStoreService {
 
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
+  Future deleteUser(String id) async {
+    try {
+      await _userCollectionReference.doc(id).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Future<Map<String, dynamic>> getLimitsOnTransactionPage() async {
     return await _limitCollectionReference.doc('limits').get().then((data) {

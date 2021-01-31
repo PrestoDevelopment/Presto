@@ -14,10 +14,15 @@ class NavigationService {
     bool isReplacement, {
     dynamic arguments,
   }) {
+    print("Navigation Service Initiated , Navigating to $routeName");
     return isReplacement
-        ? _navigationKey.currentState
-            .pushReplacementNamed(routeName, arguments: arguments)
-        : _navigationKey.currentState
-            .pushNamed(routeName, arguments: arguments);
+        ? _navigationKey.currentState.pushReplacementNamed(
+            routeName,
+            arguments: arguments,
+          )
+        : _navigationKey.currentState.pushNamed(
+            routeName,
+            arguments: arguments,
+          );
   }
 }

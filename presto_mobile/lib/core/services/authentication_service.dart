@@ -8,6 +8,7 @@ import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
+import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 import 'package:presto_mobile/locator.dart';
 
@@ -22,7 +23,7 @@ class AuthenticationService {
   final FireStoreService _fireStoreService = FireStoreService();
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
-
+  final NavigationService _navigationService = NavigationService();
   UserModel _currentUser;
 
   UserModel get currentUser => _currentUser;
@@ -85,7 +86,7 @@ class AuthenticationService {
       }
       return result;
     } catch (e) {
-      print("Theres an error in logging In");
+      print("There's an error in logging In");
       return e;
     }
   }
@@ -98,7 +99,7 @@ class AuthenticationService {
         user.notificationToken = token;
       });
       _currentUser = user;
-      print("Signing in");
+      print("Now verifying OTP");
       var authResult = await _auth.createUserWithEmailAndPassword(
         email: user.email,
         password: pass,
@@ -156,7 +157,7 @@ class AuthenticationService {
           _fireStoreService.userDocUpdate(_currentUser);
           return true;
         } catch (e) {
-          print("theres an error here");
+          print("there's an error here");
           print(e.toString());
           if (e is PlatformException) return e.message;
           return e.toString();

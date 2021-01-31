@@ -8,3 +8,5 @@ const String NotificationViewRoute = "NotificationView";
 const String PaymentViewRoute = "PaymentPage";
 const String ListNotificationViewRoute = "ListNotificationView";
 const String EmailVerificationRoute = "EmailVerificationView";
+const String InfoSliderRoute = "InfoSlider";
+const String InfoSliderViewRoute = "Information Slider";

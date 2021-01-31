@@ -1,11 +1,11 @@
 import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/services/analytics_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
-import 'package:presto_mobile/core/services/push_notification_service.dart';
 import 'package:presto_mobile/locator.dart';
 import 'package:presto_mobile/managers/dialog_manager.dart';
 import 'package:presto_mobile/ui/router.dart';
@@ -67,7 +67,10 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) => Navigator(
         key: locator<DialogService>().dialogNavigationKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => DialogManager(child: child)),
+          builder: (context) => DialogManager(
+            child: child,
+          ),
+        ),
       ),
       navigatorKey: locator<NavigationService>().navigationKey,
       navigatorObservers: [locator<AnalyticsService>().getAnalyticsObserver()],
