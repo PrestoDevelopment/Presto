@@ -55,7 +55,7 @@ Route<dynamic> customRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: EmailVerificationView(),
       );
-  //For passing arguments
+    //For passing arguments
     case SignupViewRoute:
     // var abc = settings.arguments
       return _getPageRoute(
