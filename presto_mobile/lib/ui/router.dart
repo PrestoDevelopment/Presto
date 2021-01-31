@@ -57,7 +57,7 @@ Route<dynamic> customRoute(RouteSettings settings) {
       );
     //For passing arguments
     case SignupViewRoute:
-    // var abc = settings.arguments
+      // var abc = settings.arguments
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: SignUpView(),
