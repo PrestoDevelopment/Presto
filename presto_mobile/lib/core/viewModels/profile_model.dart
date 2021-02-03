@@ -54,6 +54,21 @@ class ProfileModel extends StreamViewModel {
     await _navigationService.navigateTo(OtpViewRoute, false, arguments: user);
   }
 
+  Future popUpForRedeemButton() async {
+    if(user.prestoCoins>=1000){
+      return _dialogService.showDialog(
+        title: "Are You Sure",
+        description: "1000 Presto Coins will be deducted from your profile! Do You want to proceed?",
+        buttonTitle: "Proceed!"
+      );
+    }else{
+      return _dialogService.showDialog(
+        title: "Not Enough Coins",
+        description: "You do not have enough Presto Coins to redeem"
+      );
+    }
+  }
+
   @override
   Stream get stream => _fireStoreService
       .listenToUserDocumentRealTime(_authenticationService.retrieveCode());

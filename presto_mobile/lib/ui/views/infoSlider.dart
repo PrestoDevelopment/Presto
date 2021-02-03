@@ -236,27 +236,27 @@ List<SliderModel> getSlides() {
   SliderModel sliderModel = new SliderModel();
 
   //1
-  sliderModel.setDesc("Discover a Lender offering money at reasonable rate");
-  sliderModel.setTitle("Search......");
-  sliderModel.setImageAssetPath("assets/images/prestowelcomescreen.png");
+  sliderModel.setDesc("We are committed to build strong communities on mutual trust and support");
+  sliderModel.setTitle("Why Presto Exists");
+  sliderModel.setImageAssetPath("assets/images/firstImage.jpeg");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();
 
   //2
   sliderModel.setDesc(
-      "Payback in the time which best suits you and enjoy the Presto rewards");
-  sliderModel.setTitle("Repay..... ");
-  sliderModel.setImageAssetPath("assets/images/prestowelcomescreen.png");
+      "A highly innovative invite-only community based P2P lending platform disbursing small loans in a matter of 30 seconds");
+  sliderModel.setTitle("What Presto Does");
+  sliderModel.setImageAssetPath("assets/images/secondImage.jpg");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();
 
   //3
   sliderModel.setDesc(
-      "Save and lend money for your liking interest rate and earn returns");
-  sliderModel.setTitle("Lend........");
-  sliderModel.setImageAssetPath("assets/images/prestowelcomescreen.png");
+      "You can borrow from your fellow community members by placing a request on the 'Borrow Now' screen & lend by accepting a borrowing request");
+  sliderModel.setTitle("How Presto Work");
+  sliderModel.setImageAssetPath("assets/images/thirdImage.jpg");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();
