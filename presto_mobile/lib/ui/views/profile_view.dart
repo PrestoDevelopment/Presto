@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/profile_model.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
@@ -198,11 +199,39 @@ class _ProfileViewState extends State<ProfileView> {
                                 icon: Icons.credit_card_rounded,
                                 trailName: '${model.creditWorthyScore ?? '0'}',
                               ),
+                              ListToken(
+                                name: 'Presto Coins',
+                                icon: Icons.money,
+                                trailName: '${model.user.prestoCoins ?? '0'}',
+                              ),
                               SizedBox(
                                 height: height / 18,
                               ),
                             ],
-                          )
+                          ),
+                          GestureDetector(
+                            onTap: (){model.popUpForRedeemButton();},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: color.color1,
+                                borderRadius: BorderRadius.all(Radius.circular(20.0))
+                              ),
+                              height: height/10,
+                              width: width/2,
+                              child: Center(
+                                child: Text(
+                                  'Redeem Presto Coins',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height / 18,
+                          ),
                         ],
                       ),
                     ),
