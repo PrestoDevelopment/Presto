@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:presto_mobile/constants/route_names.dart';
+import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
@@ -55,17 +56,35 @@ class ProfileModel extends StreamViewModel {
   }
 
   Future popUpForRedeemButton() async {
-    if(user.prestoCoins>=1000){
-      return _dialogService.showDialog(
-        title: "Are You Sure",
-        description: "1000 Presto Coins will be deducted from your profile! Do You want to proceed?",
-        buttonTitle: "Proceed!"
-      );
-    }else{
-      return _dialogService.showDialog(
-        title: "Not Enough Coins",
-        description: "You do not have enough Presto Coins to redeem"
-      );
+    try {
+      if (user.prestoCoins >= 1000) {
+        DialogResponse response = await _dialogService.showConfirmationDialog(
+          title: "Are You Sure",
+          description:
+              "1000 Presto Coins will be deducted from your profile! Do You want to proceed?",
+          confirmationTitle: "Proceed!",
+          cancelTitle: "Save",
+        );
+        if (response.confirmed) {
+          await _fireStoreService.redeemCode().then((redeemCode) async {
+            if (redeemCode != "") {
+              user.prestoCoins = user.prestoCoins - 1000;
+              await _fireStoreService.userDocUpdate(user);
+              _dialogService.showDialog(
+                title: "Code Redeemed",
+                description:
+                    "Your Code is : $redeemCode\n Please Take a screenshot and show the code to vendor",
+              );
+            }
+          });
+        }
+      } else {
+        return _dialogService.showDialog(
+            title: "Not Enough Coins",
+            description: "You do not have enough Presto Coins to redeem");
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 

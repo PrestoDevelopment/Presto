@@ -14,6 +14,8 @@ import '../models/user_model.dart';
 
 // ignore:_case_types
 class FireStoreService {
+  final CollectionReference _redeemCodesCollectionReference =
+      FirebaseFirestore.instance.collection('redeemCodes');
   final CollectionReference _userCollectionReference =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _limitCollectionReference =
@@ -188,7 +190,7 @@ class FireStoreService {
   }
 
   StreamController<UserModel> _userStream =
-      StreamController<UserModel>.broadcast();
+  StreamController<UserModel>.broadcast();
   StreamController _userLimits = StreamController.broadcast();
 
   //Streams getter functions
@@ -210,9 +212,7 @@ class FireStoreService {
     });
   }
 
-  Future createNewTransaction(
-    TransactionModel transaction,
-  ) async {
+  Future createNewTransaction(TransactionModel transaction,) async {
     try {
       await _transactionsCollectionReference
           .doc(transaction.transactionId)
@@ -252,8 +252,8 @@ class FireStoreService {
           'borrowerContact': user.contact,
           'transactionId': transaction.transactionId,
           'score': ((double.parse(user.communityScore) +
-                      double.parse(user.personalScore)) /
-                  2)
+              double.parse(user.personalScore)) /
+              2)
               .toString(),
         });
       });
@@ -322,8 +322,7 @@ class FireStoreService {
   }
 
   ///Changes Payment Received Bool
-  void changeBoolPaymentReceived(
-      TransactionModel transaction, bool paymentReceivedByBorrower) async {
+  void changeBoolPaymentReceived(TransactionModel transaction, bool paymentReceivedByBorrower) async {
     try {
       if (paymentReceivedByBorrower) {
         transaction.borrowerRecievedMoney = true;
@@ -338,8 +337,7 @@ class FireStoreService {
   }
 
   ///Changes Payment Sent Bool
-  void changeBoolPaymentSent(
-      TransactionModel transaction, bool paymentSentByBorrower) async {
+  void changeBoolPaymentSent(TransactionModel transaction, bool paymentSentByBorrower) async {
     try {
       if (paymentSentByBorrower) {
         transaction.borrowerSentMoney = true;
@@ -347,7 +345,7 @@ class FireStoreService {
       } else {
         UserModel user = await getUser(transaction.lenderReferralCode);
         DocumentSnapshot limits =
-            await _limitCollectionReference.doc('limits').get();
+        await _limitCollectionReference.doc('limits').get();
         if (limits != null) {
           int addCoins = limits.data()["rewardAmount"];
           user.prestoCoins = user.prestoCoins + addCoins;
@@ -410,5 +408,20 @@ class FireStoreService {
   ///
   Stream<DocumentSnapshot> transaction(String id) {
     return _transactionsCollectionReference.doc(id).snapshots();
+  }
+
+  ///Redeem Code and delete from database
+  Future<String> redeemCode() async {
+    try {
+      QuerySnapshot snapshot =
+          await _redeemCodesCollectionReference.limit(1).get();
+      DocumentSnapshot doc = snapshot.docs[0];
+      String redeemCode = doc.id;
+      await _redeemCodesCollectionReference.doc(redeemCode).delete();
+      return redeemCode;
+    } catch (e) {
+      print(e.toString());
+      return "";
+    }
   }
 }

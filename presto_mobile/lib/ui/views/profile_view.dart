@@ -63,7 +63,7 @@ class _ProfileViewState extends State<ProfileView> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       SizedBox(
-                                        height: height/30,
+                                        height: height / 30,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -98,11 +98,11 @@ class _ProfileViewState extends State<ProfileView> {
                                       Row(
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 8.0,
-                                              left: 14.0,
-                                            ),
-                                            child: IconButton(
+                                              padding: EdgeInsets.only(
+                                                top: 8.0,
+                                                left: 14.0,
+                                              ),
+                                              child: IconButton(
                                                 icon: Icon(
                                                   Icons.power_settings_new,
                                                   color: Colors.white,
@@ -111,25 +111,28 @@ class _ProfileViewState extends State<ProfileView> {
                                                   //Sign Out
                                                   model.signOut();
                                                 },
-                                            )
-                                          ),
+                                              )),
                                           Padding(
-                                              padding: EdgeInsets.only(
-                                                left: 5.0,
-                                                top: 8.0,
-                                              ),
+                                            padding: EdgeInsets.only(
+                                              left: 5.0,
+                                              top: 8.0,
+                                            ),
                                             child: IconButton(
                                               icon: Icon(
                                                 Icons.share,
                                                 color: Colors.white,
                                               ),
                                               onPressed: () {
-                                                final RenderBox box = context.findRenderObject();
+                                                final RenderBox box =
+                                                    context.findRenderObject();
                                                 Share.share(
                                                     "Hey! I cordially invite you to join the RVCEians United community which will enable you to borrow small amount of money, interest free. You can borrow up to 500-2500 Rs from your community through this platform. Excited to welcome you to the community. Please enter this referral code ${model.user.referralCode}",
-                                                    subject: "Download New Presto Mobile App Now!!",
+                                                    subject:
+                                                        "Download New Presto Mobile App Now!!",
                                                     sharePositionOrigin:
-                                                    box.localToGlobal(Offset.zero) & box.size);
+                                                        box.localToGlobal(
+                                                                Offset.zero) &
+                                                            box.size);
                                               },
                                             ),
                                           ),
@@ -191,7 +194,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 name: 'Community Code',
                                 icon: Icons.info,
                                 trailName: model.user != null
-                                    ? '${model.user.referralCode}'
+                                    ? '${model.user?.referralCode}'
                                     : 'error',
                               ),
                               ListToken(
@@ -202,7 +205,8 @@ class _ProfileViewState extends State<ProfileView> {
                               ListToken(
                                 name: 'Presto Coins',
                                 icon: Icons.money,
-                                trailName: '${model.user.prestoCoins ?? '0'}',
+                                trailName:
+                                    '${model.user?.prestoCoins.toString() ?? '0'}',
                               ),
                               SizedBox(
                                 height: height / 18,
@@ -210,21 +214,21 @@ class _ProfileViewState extends State<ProfileView> {
                             ],
                           ),
                           GestureDetector(
-                            onTap: (){model.popUpForRedeemButton();},
+                            onTap: () {
+                              model.popUpForRedeemButton();
+                            },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: color.color1,
-                                borderRadius: BorderRadius.all(Radius.circular(20.0))
-                              ),
-                              height: height/10,
-                              width: width/2,
+                                  color: color.color1,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              height: height / 10,
+                              width: width / 2,
                               child: Center(
                                 child: Text(
                                   'Redeem Presto Coins',
                                   style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white
-                                  ),
+                                      fontSize: 20.0, color: Colors.white),
                                 ),
                               ),
                             ),
