@@ -55,7 +55,7 @@ class TransactionsViewModel extends BaseViewModel {
           if (transaction != null && transaction is TransactionModel) {
             print("Confirming transaction fetch");
             //Fill the transaction in both all transactions list as well as if not completed in recent transactions list
-            if(transaction.approvedStatus){
+            if (transaction.approvedStatus) {
               if (transaction.lenderRecievedMoney) {
                 status = "Phase 5";
               } else if (transaction.borrowerSentMoney) {
@@ -64,15 +64,14 @@ class TransactionsViewModel extends BaseViewModel {
                 status = "Phase 3";
               } else if (transaction.lenderSentMoney) {
                 status = "Phase 2";
-              } else if(!transaction.lenderSentMoney){
+              } else if (!transaction.lenderSentMoney) {
                 status = "Phase 1";
               } else {
                 status = "Lender Not Found";
               }
-            }else{
+            } else {
               status = "Lender Not Found";
             }
-
 
             Timestamp now = Timestamp.now();
             DateTime today = now.toDate();
@@ -101,9 +100,9 @@ class TransactionsViewModel extends BaseViewModel {
               );
               if (transaction.initiationDate.toDate().isAfter(defaultCase)) {
                 if (!transaction.isBorrowerPenalised) {
-                  transaction.isBorrowerPenalised = true;
-                  _fireStoreService.updateTransaction(transaction);
                   try {
+                    transaction.isBorrowerPenalised = true;
+                    _fireStoreService.updateTransaction(transaction);
                     user.personalScore = (double.parse(user.personalScore) -
                             durationsMap['decrementCreditScore'])
                         .toString();

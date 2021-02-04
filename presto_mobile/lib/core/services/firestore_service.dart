@@ -266,6 +266,8 @@ class FireStoreService {
     }
   }
 
+  ///Update Transaction
+
   Future updateTransaction(TransactionModel transaction) async {
     try {
       await _transactionsCollectionReference
@@ -275,6 +277,8 @@ class FireStoreService {
       print(e.toString());
     }
   }
+
+  ///Get transaction
 
   Future getTransaction(String code) async {
     try {
@@ -295,6 +299,8 @@ class FireStoreService {
       return e.toString();
     }
   }
+
+  ///Sync community Score in the chain
 
   Future syncCommunityScore(String parentCode) async {
     try {
@@ -318,40 +324,56 @@ class FireStoreService {
   ///Changes Payment Received Bool
   void changeBoolPaymentReceived(
       TransactionModel transaction, bool paymentReceivedByBorrower) async {
-    if (paymentReceivedByBorrower) {
-      transaction.borrowerRecievedMoney = true;
-      await updateTransaction(transaction);
-    } else {
-      transaction.lenderRecievedMoney = true;
-      await updateTransaction(transaction);
+    try {
+      if (paymentReceivedByBorrower) {
+        transaction.borrowerRecievedMoney = true;
+        await updateTransaction(transaction);
+      } else {
+        transaction.lenderRecievedMoney = true;
+        await updateTransaction(transaction);
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
   ///Changes Payment Sent Bool
   void changeBoolPaymentSent(
       TransactionModel transaction, bool paymentSentByBorrower) async {
-    if (paymentSentByBorrower) {
-      transaction.borrowerSentMoney = true;
-      await updateTransaction(transaction);
-    } else {
-      transaction.lenderSentMoney = true;
-      await updateTransaction(transaction);
+    try {
+      if (paymentSentByBorrower) {
+        transaction.borrowerSentMoney = true;
+        await updateTransaction(transaction);
+      } else {
+        UserModel user = await getUser(transaction.lenderReferralCode);
+        DocumentSnapshot limits =
+            await _limitCollectionReference.doc('limits').get();
+        if (limits != null) {
+          int addCoins = limits.data()["rewardAmount"];
+          user.prestoCoins = user.prestoCoins + addCoins;
+        }
+        transaction.lenderSentMoney = true;
+        await updateTransaction(transaction);
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
   ///Change Handshake bool and delete notification
-  Future approveHandshake(String id) async {
-    AuthenticationService _auth = AuthenticationService();
-    UserModel user = await getUser(_auth.retrieveCode());
+  Future approveHandshake(String transactionId) async {
+    UserModel user = await getUser(AuthenticationService().retrieveCode());
     if (user != null) {
       try {
-        _transactionsCollectionReference.doc(id).update({
+        user.transactionIds.add(transactionId);
+        await userDocUpdate(user);
+        _transactionsCollectionReference.doc(transactionId).update({
           'lenderName': user.name,
           'lenderReferralCode': user.referralCode,
           'approvedStatus': true,
           'lenderContact': user.contact,
         });
-        var transaction = await getTransaction(id);
+        var transaction = await getTransaction(transactionId);
         await _notificationsCollectionReference
             .doc(transaction.borrowerReferralCode)
             .delete();
@@ -385,8 +407,8 @@ class FireStoreService {
   }
 
   ///Get transaction As Stream
-
-  Stream transaction(String id) {
-    if (id != null) return _transactionsCollectionReference.doc(id).snapshots();
+  ///
+  Stream<DocumentSnapshot> transaction(String id) {
+    return _transactionsCollectionReference.doc(id).snapshots();
   }
 }
