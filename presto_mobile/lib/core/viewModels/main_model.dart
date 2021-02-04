@@ -13,9 +13,7 @@ class MainPageModel extends StreamViewModel {
   ];
   int _selectedIndex = 1;
 
-  bool get hasData => hasData;
-
-  get snapshots => data;
+  bool get hasData => dataReady;
 
   get pageID => _pageID;
 

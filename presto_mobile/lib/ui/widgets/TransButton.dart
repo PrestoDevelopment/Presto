@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/managers/trans_card_manager.dart';
@@ -20,29 +19,15 @@ class TransactionCardButton extends StatelessWidget {
     this.transaction,
   });
 
-  Future transactionButtonTap() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      print(file.name);
-      print(file.bytes);
-      print(file.size);
-      print(file.extension);
-      print(file.path);
-    } else {
-      // User canceled the picker
-    }
-  }
-
   TransCardManager _cardManager = TransCardManager();
 
   @override
   Widget build(BuildContext context) {
     String displayText;
-    Function onTap;
     if (tranStatus != "Lender Not Found") {
       _cardManager.setTargetUser(userTargeted);
       _cardManager.setStatus(tranStatus);
+      _cardManager.setTransaction(transaction);
       displayText = _cardManager.getRefinedStatus();
     }
 
@@ -59,7 +44,7 @@ class TransactionCardButton extends StatelessWidget {
             ),
           ),
         ),
-        onTap: onTap,
+        onTap: _cardManager.onTap(),
       );
     } else {
       return Icon(

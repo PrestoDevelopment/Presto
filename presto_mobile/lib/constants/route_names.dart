@@ -10,3 +10,6 @@ const String ListNotificationViewRoute = "ListNotificationView";
 const String EmailVerificationRoute = "EmailVerificationView";
 const String InfoSliderRoute = "InfoSlider";
 const String InfoSliderViewRoute = "Information Slider";
+const String BufferViewRoute = "Buffer View";
+const String SuccessViewRoute = "lender Found";
+const String FailureViewRoute = "Lender Not Found";

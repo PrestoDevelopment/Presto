@@ -349,6 +349,7 @@ class FireStoreService {
           'lenderName': user.name,
           'lenderReferralCode': user.referralCode,
           'approvedStatus': true,
+          'lenderContact': user.contact,
         });
         var transaction = await getTransaction(id);
         await _notificationsCollectionReference
@@ -381,5 +382,11 @@ class FireStoreService {
       });
       return notifications;
     }
+  }
+
+  ///Get transaction As Stream
+
+  Stream transaction(String id) {
+    if (id != null) return _transactionsCollectionReference.doc(id).snapshots();
   }
 }

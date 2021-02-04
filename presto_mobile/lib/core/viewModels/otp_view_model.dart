@@ -136,7 +136,7 @@ class OtpViewModel extends BaseViewModel {
             //await _auth.currentUser.sendEmailVerification();
             print(InfoSliderViewRoute);
             _navigationService.navigateTo(
-              InfoSliderViewRoute,
+              EmailVerificationRoute,
               true,
             );
             return true;

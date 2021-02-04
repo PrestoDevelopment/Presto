@@ -39,34 +39,38 @@ class _ListNotificationViewState extends State<ListNotificationView> {
               )
             : SafeArea(
                 child: Scaffold(
-                  body: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: height / 20,
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          'All Notifications',
-                          style: TextStyle(color: color1, fontSize: 30.0),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: height / 20,
                         ),
-                      ),
-                      SizedBox(
-                        height: height / 30,
-                      ),
-                      ListView.builder(
-                        itemCount: model.notifications.length,
-                        itemBuilder: (context, counter) {
-                          return notificationListCard(
-                            model.notifications[counter],
-                            height,
-                            width,
-                          );
-                        },
-                      ),
-                      // notificationListCard( , height, width),
-                    ],
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            'All Notifications',
+                            style: TextStyle(color: color1, fontSize: 30.0),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height / 30,
+                        ),
+                        model.notifications != null
+                            ? ListView.builder(
+                                itemCount: model.notifications.length,
+                                itemBuilder: (context, counter) {
+                                  return notificationListCard(
+                                    model.notifications[counter],
+                                    height,
+                                    width,
+                                  );
+                                },
+                              )
+                            : Container(),
+                        // notificationListCard( , height, width),
+                      ],
+                    ),
                   ),
                 ),
               );

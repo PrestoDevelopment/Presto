@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/notificationModel.dart';
+import 'package:presto_mobile/ui/views/buffer_view.dart';
 import 'package:presto_mobile/ui/views/email_verification_view.dart';
+import 'package:presto_mobile/ui/views/failure_view.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
 import 'package:presto_mobile/ui/views/infoSlider.dart';
 import 'package:presto_mobile/ui/views/list_notification_view.dart';
@@ -11,6 +13,7 @@ import 'package:presto_mobile/ui/views/notification_view.dart';
 import 'package:presto_mobile/ui/views/otp_view.dart';
 import 'package:presto_mobile/ui/views/payment_view.dart';
 import 'package:presto_mobile/ui/views/signup_view.dart';
+import 'package:presto_mobile/ui/views/success_view.dart';
 
 import '../constants/route_names.dart';
 import 'views/startup_view.dart';
@@ -83,11 +86,35 @@ Route<dynamic> customRoute(RouteSettings settings) {
           amount: data,
         ),
       );
+    case FailureViewRoute:
+      print("Transaction failed Going to failure Screen");
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: FailurePage(),
+      );
+    case SuccessViewRoute:
+      print("Going to Success screen");
+      var transaction = settings.arguments;
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: SuccessPage(
+          transaction: transaction,
+        ),
+      );
     case InfoSliderRoute:
       print("Going to InfoSlider");
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: InfoSlider(),
+      );
+    case BufferViewRoute:
+      var transactionId = settings.arguments;
+      print("Going to Buffer View");
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: BufferView(
+          transactionId: transactionId,
+        ),
       );
     default:
       var message = settings.arguments;
