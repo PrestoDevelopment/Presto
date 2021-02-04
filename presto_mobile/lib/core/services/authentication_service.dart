@@ -17,7 +17,6 @@ import '../models/user_model.dart';
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Connectivity connectivity = Connectivity();
-
   // final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
   final FireStoreService _fireStoreService = FireStoreService();
@@ -32,28 +31,6 @@ class AuthenticationService {
 
   String retrieveCode() {
     return _auth.currentUser.displayName;
-  }
-
-  void verifyPhone(
-    String verificationId,
-    Function codeSent,
-    Function codeAutoRetrievalTimeout,
-    Function complete,
-    UserModel user,
-  ) {
-    String id = "";
-    _auth.verifyPhoneNumber(
-      phoneNumber: '+91' + user.contact.trim(),
-      verificationCompleted: complete,
-      verificationFailed: (FirebaseException e) {
-        _dialogService.showDialog(
-          title: "Error in Verification",
-          description: e.message.toString(),
-        );
-      },
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-    );
   }
 
   void verifyEmail(UserModel user) async {

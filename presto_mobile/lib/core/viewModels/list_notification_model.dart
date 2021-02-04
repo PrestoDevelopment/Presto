@@ -1,24 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:presto_mobile/core/models/notificationModel.dart';
 import 'package:stacked/stacked.dart';
-import 'package:presto_mobile/core/services/authentication_service.dart';
-import 'package:presto_mobile/core/services/dialog_service.dart';
-import 'package:presto_mobile/core/services/firestore_service.dart';
-import 'package:presto_mobile/core/services/navigation_service.dart';
-import 'package:presto_mobile/locator.dart';
-import '../models/user_model.dart';
-import '../services/authentication_service.dart';
-import '../services/firestore_service.dart';
 
-class ListNotificationModel extends StreamViewModel{
-  final AuthenticationService _authenticationService = AuthenticationService();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final FireStoreService _fireStoreService = FireStoreService();
-  final DialogService _dialogService = locator<DialogService>();
+class ListNotificationModel extends BaseViewModel {
+  List<NotificationModel> _notifications;
 
-  bool get hasUserData => dataReady;
+  List<NotificationModel> get notifications => _notifications;
 
-  UserModel get user => data;
-
-  @override
-  Stream get stream => _fireStoreService
-      .listenToUserDocumentRealTime(_authenticationService.retrieveCode());
+  void onModelReady(dynamic snaps) {
+    if (snaps != null && snaps is QuerySnapshot) {
+      snaps.docs.forEach((element) {
+        _notifications.add(NotificationModel(
+          borrowerName: element.data()['borrowerName'],
+          amount: element.data()['amount'],
+          paymentOptions: element.data()['paymentOptions'],
+          borrowerContact: element.data()['borrowerContact'],
+          transactionId: element.data()['transactionId'],
+          score: element.data()['score'],
+        ));
+      });
+      notifyListeners();
+    }
+  }
 }

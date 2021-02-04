@@ -5,7 +5,12 @@ import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
 
 import '../resources/Colors.dart';
+
 class ListNotificationView extends StatefulWidget {
+  final dynamic snapshots;
+
+  ListNotificationView({this.snapshots});
+
   @override
   _ListNotificationViewState createState() => _ListNotificationViewState();
 }
@@ -16,47 +21,56 @@ class _ListNotificationViewState extends State<ListNotificationView> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return ViewModelBuilder<ListNotificationModel>.reactive(
-        viewModelBuilder: () => ListNotificationModel(),
-        builder: (context,model,child){
-          return !model.hasUserData
-              ? Center(
-                  child: Container(
-                    child: FadingText(
-                      'Loading profile...',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      ),
+      viewModelBuilder: () => ListNotificationModel(),
+      onModelReady: (model) => model.onModelReady(widget.snapshots),
+      builder: (context, model, child) {
+        return model.isBusy
+            ? Center(
+                child: Container(
+                  child: FadingText(
+                    'Loading profile...',
+                    style: TextStyle(
+                      fontSize: 20.0,
                     ),
                   ),
+                ),
               )
-              : SafeArea(
-                  child: Scaffold(
-                    body: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: height/20,
+            : SafeArea(
+                child: Scaffold(
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: height / 20,
+                      ),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          'All Notifications',
+                          style: TextStyle(color: color1, fontSize: 30.0),
                         ),
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            'All Notifications',
-                            style: TextStyle(
-                              color: color1,
-                              fontSize: 30.0
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: height/30,
-                        ),
-                        notificationListCard(height,width),
-                      ],
-                    ),
-                  )
+                      ),
+                      SizedBox(
+                        height: height / 30,
+                      ),
+                      ListView.builder(
+                        itemCount: model.notifications.length,
+                        itemBuilder: (context, counter) {
+                          return notificationListCard(
+                            model.notifications[counter],
+                            height,
+                            width,
+                          );
+                        },
+                      ),
+                      // notificationListCard( , height, width),
+                    ],
+                  ),
+                ),
               );
-          }
+      },
     );
   }
 }

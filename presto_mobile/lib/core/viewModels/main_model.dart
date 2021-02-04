@@ -1,9 +1,10 @@
-import 'package:presto_mobile/core/services/push_notification_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:presto_mobile/core/services/analytics_service.dart';
+import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:stacked/stacked.dart';
 
-class MainPageModel extends BaseViewModel {
-  // final PushNotificationService _pushNotificationService =
-  //     PushNotificationService();
+class MainPageModel extends StreamViewModel {
+  final AnalyticsService _analyticsService = AnalyticsService();
   var _pageID = [
     'ProfilePage',
     'HomePage',
@@ -12,20 +13,23 @@ class MainPageModel extends BaseViewModel {
   ];
   int _selectedIndex = 1;
 
-  get pageID => _pageID;
+  bool get hasData => hasData;
 
-  // void onModelReady() async {
-  //   // initialised Push notifications
-  //   // await _pushNotificationService.initialise();
-  //   // TODO: push InfoSlider if SignUp
-  // }
+  get snapshots => data;
+
+  get pageID => _pageID;
 
   get selectedIndex => _selectedIndex;
 
   void onTappedBar(int value) {
-    // FirebaseAnalytics analytics = FirebaseAnalytics();
-    // analytics.setCurrentScreen(screenName: _pageID[value]);
+    _analyticsService.setScreen(_pageID[value]);
     _selectedIndex = value;
     notifyListeners();
   }
+
+  @override
+  Stream get stream => Firestore.instance
+      .collection('notifications')
+      .where('referees', arrayContains: AuthenticationService().retrieveCode())
+      .snapshots();
 }

@@ -67,6 +67,10 @@ class PaymentModel extends BaseViewModel {
         () async {
           print("hello Transaction initiated");
           _navigationService.pop();
+          _dialogService.showDialog(
+              title: "Request Sent!!",
+              description:
+                  "Your Borrowing Request has been sent. Please Be patient for lender to accept request. Thank You.");
           // http.Response response = await http.post(
           //   "http://192.168.29.70:3000/firebase/notification/",
           //   headers: {"Content-Type": "application/json"},
@@ -102,9 +106,8 @@ class PaymentModel extends BaseViewModel {
     setBusy(false);
   }
 
-  void returnTap(){
+  void returnTap() {
     _navigationService.navigateTo("HomeView", true);
     _navigationService.pop();
   }
-
 }

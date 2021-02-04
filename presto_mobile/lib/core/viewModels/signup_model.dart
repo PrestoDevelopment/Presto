@@ -95,6 +95,7 @@ class SignUpModel extends BaseViewModel {
               personalScore: '0',
               contactVerified: false,
               emailVerified: false,
+              prestoCoins: 0,
               deviceId: deviceId,
             ),
           );

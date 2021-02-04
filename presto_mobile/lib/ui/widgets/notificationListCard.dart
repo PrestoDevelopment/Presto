@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:presto_mobile/core/models/transaction_model.dart';
-import 'package:presto_mobile/ui/widgets/TransButton.dart';
+import 'package:presto_mobile/core/models/notificationModel.dart';
+import 'package:presto_mobile/core/services/dialog_service.dart';
+import 'package:presto_mobile/core/services/firestore_service.dart';
 
-import '../resources/Colors.dart';
+Widget notificationListCard(
+  NotificationModel notification,
+  var height,
+  var width,
+) {
+  FireStoreService _fireStoreService = FireStoreService();
+  String paymentModes = '';
+  List<String> options = ['PayTm', 'GPay', 'UPI', 'PhonePay', 'PayPal'];
 
-Widget notificationListCard(var height, var width){
+  for (int i = 0; i < notification.paymentOptions.length; i++) {
+    i == paymentModes.length - 1
+        ? paymentModes = paymentModes + options[i]
+        : paymentModes = paymentModes + options[i] + ', ';
+  }
+
   return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.0,horizontal: 10.0),
+    padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
     child: Card(
       elevation: 5.0,
       child: Padding(
         padding: EdgeInsets.all(6.0),
         child: ExpansionTile(
           title: Text(
-              '₹ 500',
+            '₹ ${notification.amount}',
             style: TextStyle(
               fontSize: 25.0,
             ),
@@ -28,15 +41,15 @@ Widget notificationListCard(var height, var width){
                 ),
               ),
               Text(
-                'Credit Score: 4.5',
+                'Credit Score: ${notification.score}',
                 style: TextStyle(
                   fontSize: 15.0,
                 ),
               ),
               Text(
-                'Mode of Payment: PayTm, Gpay',
+                'Mode of Payment: $paymentModes',
                 style: TextStyle(
-                    fontSize: 15.0,
+                  fontSize: 15.0,
                 ),
               )
             ],
@@ -55,7 +68,7 @@ Widget notificationListCard(var height, var width){
                 Padding(
                   padding: EdgeInsets.only(right: 20),
                   child: Text(
-                    'Sushrut Patwardhan',
+                    '${notification.borrowerName}',
                   ),
                 ),
               ],
@@ -71,23 +84,22 @@ Widget notificationListCard(var height, var width){
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 20),
-                  child: Text('9322799919'),
+                  child: Text('${notification.borrowerContact}'),
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text("Due Date:"),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Text('12/2/2021')
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: <Widget>[
+            //     Padding(
+            //       padding: EdgeInsets.only(left: 20),
+            //       child: Text("Due Date:"),
+            //     ),
+            //     Padding(
+            //         padding: EdgeInsets.only(right: 20),
+            //         child: Text('12/2/2021')),
+            //   ],
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -114,37 +126,46 @@ Widget notificationListCard(var height, var width){
                     children: [
                       GestureDetector(
                         child: Container(
-                          width: width/10,
+                          width: width / 10,
                           color: Colors.green,
                           child: Center(
                             child: Text(
-                                'Yes',
+                              'Yes',
                               style: TextStyle(
                                 fontSize: 20.0,
-                                color: Colors.white
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
+                        onTap: () async {
+                          var result = await _fireStoreService
+                              .approveHandshake(notification.transactionId);
+
+                          if (result is bool && result) {
+                            DialogService().showDialog(
+                                title: "Success",
+                                description:
+                                    "Handshake Success!!\n Now Please Complete the Transaction.");
+                          }
+                        },
                       ),
                       SizedBox(
                         width: 10.0,
                       ),
-                      GestureDetector(
-                        child: Container(
-                          width: width/10,
-                          color: Colors.red,
-                          child: Center(
-                            child: Text(
-                                'No',
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
+                      // GestureDetector(
+                      //   child: Container(
+                      //     width: width / 10,
+                      //     color: Colors.red,
+                      //     child: Center(
+                      //       child: Text(
+                      //         'No',
+                      //         style: TextStyle(
+                      //             fontSize: 20.0, color: Colors.white),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                 )

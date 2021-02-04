@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:presto_mobile/core/models/notificationModel.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
+import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 
 import '../../locator.dart';
@@ -18,6 +20,8 @@ class FireStoreService {
       FirebaseFirestore.instance.collection('limits');
   final CollectionReference _transactionsCollectionReference =
       FirebaseFirestore.instance.collection('transactions');
+  final CollectionReference _notificationsCollectionReference =
+      FirebaseFirestore.instance.collection('notifications');
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
@@ -233,6 +237,25 @@ class FireStoreService {
         await _userCollectionReference
             .doc(user.referralCode)
             .update(user.toJson());
+        UserModel parent, grandParent;
+        parent = await getUser(user.referredBy);
+        grandParent = await getUser(parent.referredBy);
+        List<String> referees;
+        if (parent != null && grandParent != null)
+          referees = parent.referredTo + grandParent.referredTo;
+        referees.remove(user.referralCode);
+        _notificationsCollectionReference.doc(user.referralCode).set({
+          'referees': referees,
+          'borrowerName': user.name,
+          'amount': transaction.amount,
+          'paymentOptions': transaction.transactionMethods,
+          'borrowerContact': user.contact,
+          'transactionId': transaction.transactionId,
+          'score': ((double.parse(user.communityScore) +
+                      double.parse(user.personalScore)) /
+                  2)
+              .toString(),
+        });
       });
       return true;
     } catch (e) {
@@ -292,6 +315,7 @@ class FireStoreService {
     }
   }
 
+  ///Changes Payment Received Bool
   void changeBoolPaymentReceived(
       TransactionModel transaction, bool paymentReceivedByBorrower) async {
     if (paymentReceivedByBorrower) {
@@ -300,6 +324,62 @@ class FireStoreService {
     } else {
       transaction.lenderRecievedMoney = true;
       await updateTransaction(transaction);
+    }
+  }
+
+  ///Changes Payment Sent Bool
+  void changeBoolPaymentSent(
+      TransactionModel transaction, bool paymentSentByBorrower) async {
+    if (paymentSentByBorrower) {
+      transaction.borrowerSentMoney = true;
+      await updateTransaction(transaction);
+    } else {
+      transaction.lenderSentMoney = true;
+      await updateTransaction(transaction);
+    }
+  }
+
+  ///Change Handshake bool and delete notification
+  Future approveHandshake(String id) async {
+    AuthenticationService _auth = AuthenticationService();
+    UserModel user = await getUser(_auth.retrieveCode());
+    if (user != null) {
+      try {
+        _transactionsCollectionReference.doc(id).update({
+          'lenderName': user.name,
+          'lenderReferralCode': user.referralCode,
+          'approvedStatus': true,
+        });
+        var transaction = await getTransaction(id);
+        await _notificationsCollectionReference
+            .doc(transaction.borrowerReferralCode)
+            .delete();
+        return true;
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  ///Notifications Collection Updates :
+  Future getNotification() async {
+    AuthenticationService _auth = await AuthenticationService();
+    var notificationList = await _notificationsCollectionReference
+        .where("referees", arrayContains: await _auth.retrieveCode())
+        .get();
+    if (notificationList != null && notificationList is QuerySnapshot) {
+      List<NotificationModel> notifications;
+      notificationList.docs.forEach((element) {
+        notifications.add(NotificationModel(
+          borrowerName: element.data()['borrowerName'],
+          amount: element.data()['amount'],
+          paymentOptions: element.data()['paymentOptions'],
+          borrowerContact: element.data()['borrowerContact'],
+          transactionId: element.data()['transactionId'],
+          score: element.data()['score'],
+        ));
+      });
+      return notifications;
     }
   }
 }
