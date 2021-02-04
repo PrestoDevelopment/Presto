@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/core/viewmodels/main_model.dart';
 import 'package:presto_mobile/ui/resources/Colors.dart' as color;
+import 'package:presto_mobile/ui/views/failure_view.dart';
 import 'package:presto_mobile/ui/views/home_view.dart';
 import 'package:presto_mobile/ui/views/list_notification_view.dart';
 import 'package:presto_mobile/ui/views/profile_view.dart';
@@ -88,7 +89,8 @@ class _MainPageViewState extends State<MainPageView> {
           _viewCache[index] = HomeView();
           break;
         case 2:
-          _viewCache[index] = TransactionsView();
+          _viewCache[index] = FailurePage();
+          //_viewCache[index] = TransactionsView();
           break;
         case 3:
           _viewCache[index] = ListNotificationView(

@@ -67,7 +67,7 @@ class _FailurePageState extends State<FailurePage>
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Image.asset(
-                          'assets/images/greentick.jpg',
+                          'assets/images/redcross.jpg',
                           colorBlendMode: BlendMode.clear,
                         ),
                       ),
