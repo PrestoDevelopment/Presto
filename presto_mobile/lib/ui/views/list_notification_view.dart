@@ -50,7 +50,7 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                           alignment: Alignment.topCenter,
                           child: Text(
                             'All Notifications',
-                            style: TextStyle(color: color1, fontSize: 30.0),
+                            style: TextStyle(color: Colors.black, fontSize: 30.0),
                           ),
                         ),
                         SizedBox(

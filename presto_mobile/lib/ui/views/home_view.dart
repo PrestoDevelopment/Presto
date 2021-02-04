@@ -25,7 +25,7 @@ class _HomeViewState extends State<HomeView> {
               body: Center(
                 child: Container(
                   child: FadingText(
-                    'Loading Home page...',
+                    'Loading ...',
                   ),
                 ),
               ),
