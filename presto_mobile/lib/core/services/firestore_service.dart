@@ -190,7 +190,7 @@ class FireStoreService {
   }
 
   StreamController<UserModel> _userStream =
-  StreamController<UserModel>.broadcast();
+      StreamController<UserModel>.broadcast();
   StreamController _userLimits = StreamController.broadcast();
 
   //Streams getter functions
@@ -212,7 +212,9 @@ class FireStoreService {
     });
   }
 
-  Future createNewTransaction(TransactionModel transaction,) async {
+  Future createNewTransaction(
+    TransactionModel transaction,
+  ) async {
     try {
       await _transactionsCollectionReference
           .doc(transaction.transactionId)
@@ -252,8 +254,8 @@ class FireStoreService {
           'borrowerContact': user.contact,
           'transactionId': transaction.transactionId,
           'score': ((double.parse(user.communityScore) +
-              double.parse(user.personalScore)) /
-              2)
+                      double.parse(user.personalScore)) /
+                  2)
               .toString(),
         });
       });
@@ -322,7 +324,8 @@ class FireStoreService {
   }
 
   ///Changes Payment Received Bool
-  void changeBoolPaymentReceived(TransactionModel transaction, bool paymentReceivedByBorrower) async {
+  void changeBoolPaymentReceived(
+      TransactionModel transaction, bool paymentReceivedByBorrower) async {
     try {
       if (paymentReceivedByBorrower) {
         transaction.borrowerRecievedMoney = true;
@@ -337,7 +340,8 @@ class FireStoreService {
   }
 
   ///Changes Payment Sent Bool
-  void changeBoolPaymentSent(TransactionModel transaction, bool paymentSentByBorrower) async {
+  void changeBoolPaymentSent(
+      TransactionModel transaction, bool paymentSentByBorrower) async {
     try {
       if (paymentSentByBorrower) {
         transaction.borrowerSentMoney = true;
@@ -345,7 +349,7 @@ class FireStoreService {
       } else {
         UserModel user = await getUser(transaction.lenderReferralCode);
         DocumentSnapshot limits =
-        await _limitCollectionReference.doc('limits').get();
+            await _limitCollectionReference.doc('limits').get();
         if (limits != null) {
           int addCoins = limits.data()["rewardAmount"];
           user.prestoCoins = user.prestoCoins + addCoins;
