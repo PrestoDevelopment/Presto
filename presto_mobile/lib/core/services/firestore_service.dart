@@ -409,7 +409,7 @@ class FireStoreService {
   }
 
   ///Get transaction As Stream
-  ///
+
   Stream<DocumentSnapshot> transaction(String id) {
     return _transactionsCollectionReference.doc(id).snapshots();
   }
