@@ -213,24 +213,48 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              model.popUpForRedeemButton();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: color.color1,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0))),
-                              height: height / 10,
-                              width: width / 2,
-                              child: Center(
-                                child: Text(
-                                  'Redeem Presto Coins',
-                                  style: TextStyle(
-                                      fontSize: 20.0, color: Colors.white),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: color.color1,
+                              borderRadius: BorderRadius.all(Radius.circular(20.0))
+                            ),
+                            height: height/10,
+                            width: width/1.5,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: (){
+                                    model.navigateToRefereesListView();
+                                  },
+                                  child: Center(
+                                    child:Text(
+                                      "Referees",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                VerticalDivider(
+                                  color: Colors.grey,
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                    model.popUpForRedeemButton();
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      "Redeem Presto Coins",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                           SizedBox(

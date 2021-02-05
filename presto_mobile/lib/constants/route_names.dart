@@ -13,3 +13,4 @@ const String InfoSliderViewRoute = "Information Slider";
 const String BufferViewRoute = "Buffer View";
 const String SuccessViewRoute = "lender Found";
 const String FailureViewRoute = "Lender Not Found";
+const String RefereesListViewRoute = "Referees List View";

@@ -75,6 +75,11 @@ class ProfileModel extends StreamViewModel {
                 description:
                     "Your Code is : $redeemCode\n Please Take a screenshot and show the code to vendor",
               );
+            }else if(redeemCode == "error"){
+              _dialogService.showDialog(
+                title: "501 Error",
+                description: "Seems like there is some problem on our side. Don't worry! we will fix it soon"
+              );
             }
           });
         }
@@ -86,6 +91,10 @@ class ProfileModel extends StreamViewModel {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future navigateToRefereesListView() async {
+    await _navigationService.navigateTo(RefereesListViewRoute, true);
   }
 
   @override
