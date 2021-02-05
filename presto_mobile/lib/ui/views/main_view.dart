@@ -31,53 +31,62 @@ class _MainPageViewState extends State<MainPageView> {
                     child: FadingText(
                       'Loading ...',
                     ),
+      viewModelBuilder: () => MainPageModel(),
+      builder: (context, model, child) {
+        return model.isBusy || !model.hasData
+            ? Center(
+                child: Container(
+                  child: FadingText(
+                    'Loading Main Page...',
                   ),
-                )
-              : Scaffold(
-                  body: getViewForIndex(
-                    model.selectedIndex,
-                    model.data,
-                  ),
-                  bottomNavigationBar: BottomNavigationBar(
-                    items: [
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.person_outline),
-                          label: 'Profile',
-                          activeIcon: Icon(
-                            Icons.person_outline,
-                            size: 40.0,
-                          )),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.home),
-                          label: 'Home',
-                          activeIcon: Icon(
-                            Icons.home,
-                            size: 40.0,
-                          )),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.monetization_on),
-                          label: 'Transactions',
-                          activeIcon: Icon(
-                            Icons.monetization_on,
-                            size: 40.0,
-                          )),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.notifications),
-                          label: 'Notifications',
-                          activeIcon: Icon(
-                            Icons.notifications,
-                            size: 40.0,
-                          ))
-                    ],
-                    backgroundColor: Colors.white,
-                    currentIndex: model.selectedIndex,
-                    unselectedItemColor: Colors.black,
-                    type: BottomNavigationBarType.fixed,
-                    selectedItemColor: color.color1,
-                    onTap: (value) => model.onTappedBar(value),
-                  ),
-                );
-        });
+                ),
+              )
+            : Scaffold(
+                body: getViewForIndex(
+                  model.selectedIndex,
+                  model.data,
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.person_outline),
+                        label: 'Profile',
+                        activeIcon: Icon(
+                          Icons.person_outline,
+                          size: 40.0,
+                        )),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Home',
+                        activeIcon: Icon(
+                          Icons.home,
+                          size: 40.0,
+                        )),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.monetization_on),
+                        label: 'Transactions',
+                        activeIcon: Icon(
+                          Icons.monetization_on,
+                          size: 40.0,
+                        )),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.notifications),
+                        label: 'Notifications',
+                        activeIcon: Icon(
+                          Icons.notifications,
+                          size: 40.0,
+                        )),
+                  ],
+                  backgroundColor: Colors.white,
+                  currentIndex: model.selectedIndex,
+                  unselectedItemColor: Colors.black,
+                  type: BottomNavigationBarType.fixed,
+                  selectedItemColor: color.color1,
+                  onTap: (value) => model.onTappedBar(value),
+                ),
+              );
+      },
+    );
   }
 
   Widget getViewForIndex(int index, dynamic snapshots) {
