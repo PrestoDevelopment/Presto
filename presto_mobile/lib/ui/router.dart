@@ -80,9 +80,13 @@ Route<dynamic> customRoute(RouteSettings settings) {
         viewToShow: InfoSlider(),
       );
     case RefereesListViewRoute:
+      print("going to referee list page");
+      var dummyUser = settings.arguments;
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: RefereesList(),
+        viewToShow: RefereesList(
+          user: dummyUser,
+        ),
       );
     case PaymentViewRoute:
       var data = settings.arguments;

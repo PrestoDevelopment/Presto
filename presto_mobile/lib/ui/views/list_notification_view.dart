@@ -4,8 +4,6 @@ import 'package:presto_mobile/ui/widgets/notificationListCard.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:stacked/stacked.dart';
 
-import '../resources/Colors.dart';
-
 class ListNotificationView extends StatefulWidget {
   final dynamic snapshots;
 
@@ -50,7 +48,8 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                           alignment: Alignment.topCenter,
                           child: Text(
                             'All Notifications',
-                            style: TextStyle(color: Colors.black, fontSize: 30.0),
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 30.0),
                           ),
                         ),
                         SizedBox(
@@ -58,6 +57,7 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                         ),
                         model.notifications != null
                             ? ListView.builder(
+                          shrinkWrap: true,
                                 itemCount: model.notifications.length,
                                 itemBuilder: (context, counter) {
                                   return notificationListCard(

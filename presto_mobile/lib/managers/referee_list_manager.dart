@@ -1,29 +1,28 @@
-class RefereeListManager{
-  String _name;
-  String _email;
-  String _referralCode;
-  String _contact;
+class RefereeListManager {
+  List<RefereeList> _refereeList = [];
 
-  void setData(String name, String email, String contact,String referralCode){
-    _name = name;
-    _email = email;
-    _referralCode = referralCode;
-    _contact = contact;
-  }
+  List<RefereeList> get refereeList => _refereeList;
 
-  String getName(){
-    return _name;
+  addData(String name, String email, String contact, String referralCode) {
+    _refereeList.add(RefereeList(
+      name: name,
+      contact: contact,
+      email: email,
+      referralCode: referralCode,
+    ));
   }
+}
 
-  String getEmail(){
-    return _email;
-  }
+class RefereeList {
+  final String name;
+  final String email;
+  final String referralCode;
+  final String contact;
 
-  String getContact(){
-    return _contact;
-  }
-
-  String getReferralCode(){
-    return _referralCode;
-  }
+  RefereeList({
+    this.name,
+    this.email,
+    this.referralCode,
+    this.contact,
+  });
 }
