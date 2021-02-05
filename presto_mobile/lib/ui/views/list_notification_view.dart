@@ -57,7 +57,7 @@ class _ListNotificationViewState extends State<ListNotificationView> {
                         ),
                         model.notifications != null
                             ? ListView.builder(
-                          shrinkWrap: true,
+                                shrinkWrap: true,
                                 itemCount: model.notifications.length,
                                 itemBuilder: (context, counter) {
                                   return notificationListCard(
