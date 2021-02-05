@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/services/navigation_service.dart';
@@ -178,21 +177,20 @@ class SlideTile extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.asset(imagePath),
           SizedBox(
             height: 40,
           ),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 28),
           ),
           SizedBox(
             height: 20,
           ),
           Text(desc,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14))
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20))
         ],
       ),
     );
@@ -238,7 +236,6 @@ List<SliderModel> getSlides() {
   //1
   sliderModel.setDesc("We are committed to build strong communities on mutual trust and support");
   sliderModel.setTitle("Why Presto Exists");
-  sliderModel.setImageAssetPath("assets/images/firstImage.jpeg");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();
@@ -247,7 +244,6 @@ List<SliderModel> getSlides() {
   sliderModel.setDesc(
       "A highly innovative invite-only community based P2P lending platform disbursing small loans in a matter of 30 seconds");
   sliderModel.setTitle("What Presto Does");
-  sliderModel.setImageAssetPath("assets/images/secondImage.jpg");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();
@@ -256,7 +252,6 @@ List<SliderModel> getSlides() {
   sliderModel.setDesc(
       "You can borrow from your fellow community members by placing a request on the 'Borrow Now' screen & lend by accepting a borrowing request");
   sliderModel.setTitle("How Presto Work");
-  sliderModel.setImageAssetPath("assets/images/thirdImage.jpg");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();

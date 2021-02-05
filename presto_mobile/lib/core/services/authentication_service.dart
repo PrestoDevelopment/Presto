@@ -8,7 +8,6 @@ import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
 import 'package:presto_mobile/core/services/firestore_service.dart';
-import 'package:presto_mobile/core/services/navigation_service.dart';
 import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 import 'package:presto_mobile/locator.dart';
 
@@ -17,12 +16,10 @@ import '../models/user_model.dart';
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Connectivity connectivity = Connectivity();
-  // final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
   final FireStoreService _fireStoreService = FireStoreService();
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
-  final NavigationService _navigationService = NavigationService();
   UserModel _currentUser;
 
   UserModel get currentUser => _currentUser;

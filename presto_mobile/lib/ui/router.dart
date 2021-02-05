@@ -12,6 +12,7 @@ import 'package:presto_mobile/ui/views/main_view.dart';
 import 'package:presto_mobile/ui/views/notification_view.dart';
 import 'package:presto_mobile/ui/views/otp_view.dart';
 import 'package:presto_mobile/ui/views/payment_view.dart';
+import 'package:presto_mobile/ui/views/referees_list.dart';
 import 'package:presto_mobile/ui/views/signup_view.dart';
 import 'package:presto_mobile/ui/views/success_view.dart';
 
@@ -77,6 +78,15 @@ Route<dynamic> customRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: InfoSlider(),
+      );
+    case RefereesListViewRoute:
+      print("going to referee list page");
+      var dummyUser = settings.arguments;
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: RefereesList(
+          user: dummyUser,
+        ),
       );
     case PaymentViewRoute:
       var data = settings.arguments;

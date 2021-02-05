@@ -75,14 +75,32 @@ class ProfileModel extends StreamViewModel {
                 description:
                     "Your Code is : $redeemCode\n Please Take a screenshot and show the code to vendor",
               );
+            } else if (redeemCode == "error") {
+              _dialogService.showDialog(
+                  title: "501 Error",
+                  description:
+                      "Seems like there is some problem on our side. Don't worry! we will fix it soon");
             }
           });
         }
       } else {
         return _dialogService.showDialog(
-            title: "Not Enough Coins",
-            description: "You do not have enough Presto Coins to redeem");
+          title: "Not Enough Coins",
+          description: "You do not have enough Presto Coins to redeem",
+        );
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future navigateToRefereesListView() async {
+    try {
+      await _navigationService.navigateTo(
+        RefereesListViewRoute,
+        false,
+        arguments: user,
+      );
     } catch (e) {
       print(e.toString());
     }

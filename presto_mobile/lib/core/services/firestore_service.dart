@@ -420,9 +420,13 @@ class FireStoreService {
       QuerySnapshot snapshot =
           await _redeemCodesCollectionReference.limit(1).get();
       DocumentSnapshot doc = snapshot.docs[0];
-      String redeemCode = doc.id;
-      await _redeemCodesCollectionReference.doc(redeemCode).delete();
-      return redeemCode;
+      if(doc.exists){
+        String redeemCode = doc.id;
+        await _redeemCodesCollectionReference.doc(redeemCode).delete();
+        return redeemCode;
+      }else{
+        return "error";
+      }
     } catch (e) {
       print(e.toString());
       return "";

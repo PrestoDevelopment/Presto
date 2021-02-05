@@ -39,6 +39,20 @@ class _FailurePageState extends State<FailurePage>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  onPressed: (){Navigator.pop(context);},
+                  icon: Icon(
+                    Icons.arrow_back,
+                    size: 40.0,
+                    color: color.color1,
+                  ),
+                ),
+              ),
+            ),
             Container(
               height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
@@ -49,7 +63,12 @@ class _FailurePageState extends State<FailurePage>
                     width: MediaQuery.of(context).size.width / 2,
                     height: MediaQuery.of(context).size.height / 8,
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.only(
+                        left: 20.0,
+                        bottom: 20.0,
+                        right: 20.0,
+                        top: 0.0,
+                      ),
                       child: Text(
                         'Failure!',
                         style: TextStyle(
@@ -74,13 +93,6 @@ class _FailurePageState extends State<FailurePage>
                     ),
                   )
                 ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'Details:',
-                style: TextStyle(color: Colors.black, fontSize: 30.0),
               ),
             ),
             Texts(
