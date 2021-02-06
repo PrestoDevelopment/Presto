@@ -55,6 +55,9 @@ class EmailVerificationView extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(
+                height: height/15.0,
+              ),
               BusyButton(
                   title: "Proceed",
                   onPressed: () async {

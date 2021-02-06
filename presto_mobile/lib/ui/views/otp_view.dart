@@ -57,6 +57,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                     top: MediaQuery.of(context).size.height / 15,
                     left: MediaQuery.of(context).size.width / 15,
                     right: MediaQuery.of(context).size.width / 15,
+                    bottom: MediaQuery.of(context).size.height/15,
                   ),
                   child: OTPTextField(
                     length: 6,

@@ -34,20 +34,24 @@ class RefereesList extends StatelessWidget {
                   backgroundColor: Colors.white,
                   body: SingleChildScrollView(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
                           height:
                               model.refereeListManager.refereeList.length == 0
-                                  ? height / 3.0
+                                  ? height / 20.0
                                   : height / 20.0,
                         ),
                         Align(
-                          alignment: Alignment.center,
+                          alignment: Alignment.topCenter,
                           child: Text(
                             "Referees List",
                             style:
                                 TextStyle(color: Colors.black, fontSize: 30.0),
                           ),
+                        ),
+                        SizedBox(
+                          height: height/20.0,
                         ),
                         model.refereeListManager.refereeList.length == 0
                             ? Center(
