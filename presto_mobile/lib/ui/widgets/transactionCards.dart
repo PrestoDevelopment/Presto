@@ -13,8 +13,13 @@ Widget mixedCard({
   String paymentModes = '';
   List<String> options = ['PayTm', 'GPay', 'UPI', 'PhonePay', 'PayPal'];
   transaction.transactionMethods.forEach((element) {
-    paymentModes = paymentModes + options[element];
+    paymentModes = paymentModes + options[element] + ', ';
   });
+  String date = transaction.initiationDate.toDate().day.toString() +
+      '/' +
+      transaction.initiationDate.toDate().month.toString() +
+      '/' +
+      transaction.initiationDate.toDate().year.toString();
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     child: Card(
@@ -23,9 +28,11 @@ Widget mixedCard({
         padding: EdgeInsets.only(top: 6.0, left: 6.0, right: 6.0, bottom: 6.0),
         child: ExpansionTile(
           title: Text(
-            isBorrowed
-                ? transaction.lenderName ?? "Failed"
-                : transaction.borrowerName ?? "Failed",
+            transaction.approvedStatus
+                ? isBorrowed
+                    ? transaction.lenderName
+                    : transaction.borrowerName
+                : "Failed",
             style: TextStyle(
               fontSize: 20,
               color: !isBorrowed ? Colors.green : Colors.red,
@@ -43,6 +50,7 @@ Widget mixedCard({
             height: height,
             width: width,
             transaction: transaction,
+            userTargeted: isBorrowed ? 'Borrower' : 'Lender',
           ),
           children: <Widget>[
             SizedBox(
@@ -58,7 +66,7 @@ Widget mixedCard({
                 Padding(
                   padding: EdgeInsets.only(right: 20),
                   child: Text(
-                    transaction.initiationDate.toDate().toString(),
+                    date,
                   ),
                 ),
               ],

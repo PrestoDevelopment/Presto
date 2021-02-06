@@ -81,7 +81,24 @@ class SignUpModel extends BaseViewModel {
       //Complete SignUp by showing error or going to different page;
       if (result is bool) {
         if (result) {
-          _navigationService.navigateTo(MainPageViewRoute, true);
+          _navigationService.navigateTo(
+            OtpViewRoute,
+            true,
+            arguments: UserModel(
+              contact: contact,
+              email: email,
+              name: name,
+              referredBy: parentReferralCode,
+              referralCode: newReferralCode,
+              referredTo: [],
+              communityScore: '5',
+              personalScore: '0',
+              contactVerified: false,
+              emailVerified: false,
+              prestoCoins: 0,
+              deviceId: deviceId,
+            ),
+          );
           setBusy(false);
         } else {
           print(result);
@@ -101,6 +118,12 @@ class SignUpModel extends BaseViewModel {
         _dialogService.showDialog(title: 'Error', description: netError);
       }
       setBusy(false);
+    } else {
+      setBusy(false);
+      _dialogService.showDialog(
+        title: "Error",
+        description: netError,
+      );
     }
   }
 

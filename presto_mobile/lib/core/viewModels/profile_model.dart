@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:presto_mobile/constants/route_names.dart';
+import 'package:presto_mobile/core/models/dialog_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/dialog_service.dart';
@@ -41,23 +42,6 @@ class ProfileModel extends StreamViewModel {
     }
   }
 
-  void emailVeriPop() {
-    // _authenticationService.;
-    if (user.emailVerified)
-      _dialogService.showDialog(
-        title: "Email Verification",
-        description: "Your Email Is Verified",
-      );
-    else {
-      _dialogService.showDialog(
-        title: "Email Verification",
-        description:
-            "A verification email has been sent to registered Email, Please verify",
-      );
-      _authenticationService.verifyEmail(user);
-    }
-  }
-
   Future signOut() async {
     bool sure = await _authenticationService.signOut();
     if (sure) await _navigateToLogin();
@@ -69,6 +53,57 @@ class ProfileModel extends StreamViewModel {
 
   Future navigateToOtp() async {
     await _navigationService.navigateTo(OtpViewRoute, false, arguments: user);
+  }
+
+  Future popUpForRedeemButton() async {
+    try {
+      if (user.prestoCoins >= 1000) {
+        DialogResponse response = await _dialogService.showConfirmationDialog(
+          title: "Are You Sure",
+          description:
+              "1000 Presto Coins will be deducted from your profile! Do You want to proceed?",
+          confirmationTitle: "Proceed!",
+          cancelTitle: "Save",
+        );
+        if (response.confirmed) {
+          await _fireStoreService.redeemCode().then((redeemCode) async {
+            if (redeemCode != "") {
+              user.prestoCoins = user.prestoCoins - 1000;
+              await _fireStoreService.userDocUpdate(user);
+              _dialogService.showDialog(
+                title: "Code Redeemed",
+                description:
+                    "Your Code is : $redeemCode\n Please Take a screenshot and show the code to vendor",
+              );
+            } else if (redeemCode == "error") {
+              _dialogService.showDialog(
+                  title: "501 Error",
+                  description:
+                      "Seems like there is some problem on our side. Don't worry! we will fix it soon");
+            }
+          });
+        }
+      } else {
+        return _dialogService.showDialog(
+          title: "Not Enough Coins",
+          description: "You do not have enough Presto Coins to redeem",
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future navigateToRefereesListView() async {
+    try {
+      await _navigationService.navigateTo(
+        RefereesListViewRoute,
+        false,
+        arguments: user,
+      );
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override

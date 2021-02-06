@@ -9,6 +9,7 @@ class UserModel {
   String referredBy;
   List<dynamic> referredTo;
   List<dynamic> paymentMethodsUsed;
+  int prestoCoins;
 
   //Will Contain list of referral Codes of individuals whom he/she referred to.
   String referralCode;
@@ -41,6 +42,7 @@ class UserModel {
     this.totalBorrowed,
     this.totalLent,
     this.paymentMethodsUsed,
+    this.prestoCoins
   });
 
   UserModel.initial()
@@ -60,7 +62,8 @@ class UserModel {
         totalBorrowed = 0,
         totalLent = 0,
         paymentMethodsUsed = [],
-        notificationToken = null;
+        notificationToken = null,
+        prestoCoins = 0;
 
   UserModel.fromJson(Map<String, dynamic> json)
       : name = json['name'] ?? "",
@@ -79,7 +82,8 @@ class UserModel {
         totalBorrowed = json['totalBorrowed'] ?? 0,
         totalLent = json['totalLent'] ?? 0,
         paymentMethodsUsed = json['paymentMethodsUsed'] ?? [0, 0, 0, 0, 0],
-        notificationToken = json['notificationToken'] ?? "";
+        notificationToken = json['notificationToken'] ?? "",
+        prestoCoins = json['prestoCoins'] ?? 0;
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -99,6 +103,7 @@ class UserModel {
         'totalLent': totalLent,
         'totalBorrowed': totalBorrowed,
         'paymentMethodsUsed': paymentMethodsUsed,
+        'prestoCoins': prestoCoins,
       };
 
   @override
@@ -120,7 +125,8 @@ class UserModel {
       other.totalLent == totalLent &&
       other.totalBorrowed == totalBorrowed &&
       other.paymentMethodsUsed == paymentMethodsUsed &&
-      other.notificationToken == notificationToken;
+      other.notificationToken == notificationToken &&
+      other.prestoCoins == prestoCoins;
 
   @override
   int get hashCode {
@@ -142,6 +148,7 @@ class UserModel {
     result = result * 19 + totalBorrowed.hashCode;
     result = result * 19 + totalLent.hashCode;
     result = result * 19 + paymentMethodsUsed.hashCode;
+    result = result * 19 + prestoCoins.hashCode;
     return result;
   }
 }

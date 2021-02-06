@@ -55,21 +55,20 @@ class TransactionsViewModel extends BaseViewModel {
           if (transaction != null && transaction is TransactionModel) {
             print("Confirming transaction fetch");
             //Fill the transaction in both all transactions list as well as if not completed in recent transactions list
-            if (transaction.lenderRecievedMoney) {
-              status = "Transaction Finished";
-            } else if (!transaction.borrowerRecievedMoney &&
-                !transaction.lenderSentMoney) {
-              status = "Send Money";
-            } else if (transaction.borrowerSentMoney) {
-              status = "Borrower sent money";
-            } else if (transaction.borrowerRecievedMoney) {
-              status = "Borrower Received money";
-            } else if (transaction.lenderSentMoney) {
-              status = "Lender Sent Money";
-            } else if (!transaction.borrowerRecievedMoney &&
-                !transaction.lenderSentMoney &&
-                transaction.approvedStatus) {
-              status = "Send Money";
+            if (transaction.approvedStatus) {
+              if (transaction.lenderRecievedMoney) {
+                status = "Phase 5";
+              } else if (transaction.borrowerSentMoney) {
+                status = "Phase 4";
+              } else if (transaction.borrowerRecievedMoney) {
+                status = "Phase 3";
+              } else if (transaction.lenderSentMoney) {
+                status = "Phase 2";
+              } else if (!transaction.lenderSentMoney) {
+                status = "Phase 1";
+              } else {
+                status = "Lender Not Found";
+              }
             } else {
               status = "Lender Not Found";
             }
@@ -91,7 +90,8 @@ class TransactionsViewModel extends BaseViewModel {
               recentTransactions.add(
                 mixedCard(
                   transaction: transaction,
-                  isBorrowed: user.name == transaction.borrowerName ?? "",
+                  isBorrowed:
+                      user.name == transaction.borrowerName ? true : false,
                   height: _height,
                   width: _width,
                   status: status,
@@ -100,9 +100,9 @@ class TransactionsViewModel extends BaseViewModel {
               );
               if (transaction.initiationDate.toDate().isAfter(defaultCase)) {
                 if (!transaction.isBorrowerPenalised) {
-                  transaction.isBorrowerPenalised = true;
-                  _fireStoreService.updateTransaction(transaction);
                   try {
+                    transaction.isBorrowerPenalised = true;
+                    _fireStoreService.updateTransaction(transaction);
                     user.personalScore = (double.parse(user.personalScore) -
                             durationsMap['decrementCreditScore'])
                         .toString();
@@ -124,7 +124,8 @@ class TransactionsViewModel extends BaseViewModel {
             allTransactions.add(
               mixedCard(
                 transaction: transaction,
-                isBorrowed: user.name == transaction.borrowerName ?? "",
+                isBorrowed:
+                    user.name == transaction.borrowerName ? true : false,
                 height: _height,
                 width: _width,
                 status: status,

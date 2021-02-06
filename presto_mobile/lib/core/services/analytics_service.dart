@@ -24,6 +24,10 @@ class AnalyticsService {
     await _analytics.logSignUp(signUpMethod: 'email');
   }
 
+  Future setScreen(String screen) async {
+    await _analytics.setCurrentScreen(screenName: screen);
+  }
+
   Future logPostCreated({bool hasImage}) async {
     await _analytics.logEvent(
       name: 'create_post',

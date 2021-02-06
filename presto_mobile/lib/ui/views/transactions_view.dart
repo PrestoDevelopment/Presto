@@ -20,7 +20,7 @@ class _TransactionsViewState extends State<TransactionsView> {
       builder: (context, model, child) => model.isBusy
           ? Center(
               child: Container(
-                color: Colors.amber,
+                color: Colors.black,
                 child: FadingText(
                   'Loading transactions...',
                 ),
@@ -50,11 +50,13 @@ class _TransactionsViewState extends State<TransactionsView> {
                         height: 20.0,
                       ),
                       Column(
-                        children: model.recentTransactions.length > 0
+                        children: model.recentTransactions.length > 0 && model.recentTransactions != null
                             ? model.recentTransactions
                             : [
                                 Container(
-                                  child: Text("No Transactions to Display"),
+                                  child: Text("No Transactions to Display",
+                                    style: TextStyle(fontSize: 15.0, color: Colors.black),
+                                  ),
                                 ),
                               ],
                       ),
@@ -66,7 +68,7 @@ class _TransactionsViewState extends State<TransactionsView> {
                         children: <Widget>[
                           Text(
                             "All Transactions",
-                            style: TextStyle(fontSize: 30),
+                            style: TextStyle(fontSize: 30, color: Colors.black),
                           ),
                         ],
                       ),
@@ -74,11 +76,13 @@ class _TransactionsViewState extends State<TransactionsView> {
                         height: 20,
                       ),
                       Column(
-                        children: model.allTransactions.length > 0
+                        children: model.allTransactions.length > 0 && model.allTransactions != null
                             ? model.allTransactions
                             : [
                                 Container(
-                                  child: Text("No Transactions to Display"),
+                                  child: Text("No Transactions to Display",
+                                  style: TextStyle(fontSize: 15.0, color: Colors.black),
+                                  ),
                                 ),
                               ],
                       ),

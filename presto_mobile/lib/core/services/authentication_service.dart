@@ -16,13 +16,10 @@ import '../models/user_model.dart';
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Connectivity connectivity = Connectivity();
-
-  // final AnalyticsService _analyticsService = locator<AnalyticsService>();
   final DialogService _dialogService = locator<DialogService>();
   final FireStoreService _fireStoreService = FireStoreService();
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
-
   UserModel _currentUser;
 
   UserModel get currentUser => _currentUser;
@@ -31,28 +28,6 @@ class AuthenticationService {
 
   String retrieveCode() {
     return _auth.currentUser.displayName;
-  }
-
-  void verifyPhone(
-    String verificationId,
-    Function codeSent,
-    Function codeAutoRetrievalTimeout,
-    Function complete,
-    UserModel user,
-  ) {
-    String id = "";
-    _auth.verifyPhoneNumber(
-      phoneNumber: '+91' + user.contact.trim(),
-      verificationCompleted: complete,
-      verificationFailed: (FirebaseException e) {
-        _dialogService.showDialog(
-          title: "Error in Verification",
-          description: e.message.toString(),
-        );
-      },
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-    );
   }
 
   void verifyEmail(UserModel user) async {
@@ -85,7 +60,7 @@ class AuthenticationService {
       }
       return result;
     } catch (e) {
-      print("Theres an error in logging In");
+      print("There's an error in logging In");
       return e;
     }
   }
@@ -98,7 +73,7 @@ class AuthenticationService {
         user.notificationToken = token;
       });
       _currentUser = user;
-      print("Signing in");
+      print("Now verifying OTP");
       var authResult = await _auth.createUserWithEmailAndPassword(
         email: user.email,
         password: pass,
@@ -156,7 +131,7 @@ class AuthenticationService {
           _fireStoreService.userDocUpdate(_currentUser);
           return true;
         } catch (e) {
-          print("theres an error here");
+          print("there's an error here");
           print(e.toString());
           if (e is PlatformException) return e.message;
           return e.toString();

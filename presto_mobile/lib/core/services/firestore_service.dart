@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
+import 'package:presto_mobile/core/models/notificationModel.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
+import 'package:presto_mobile/core/services/authentication_service.dart';
 import 'package:presto_mobile/core/services/shared_preferences_service.dart';
 
 import '../../locator.dart';
@@ -12,17 +14,28 @@ import '../models/user_model.dart';
 
 // ignore:_case_types
 class FireStoreService {
+  final CollectionReference _redeemCodesCollectionReference =
+      FirebaseFirestore.instance.collection('redeemCodes');
   final CollectionReference _userCollectionReference =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _limitCollectionReference =
       FirebaseFirestore.instance.collection('limits');
   final CollectionReference _transactionsCollectionReference =
       FirebaseFirestore.instance.collection('transactions');
+  final CollectionReference _notificationsCollectionReference =
+      FirebaseFirestore.instance.collection('notifications');
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // final SharedPreferencesService _sharedPreferencesService =
   //     SharedPreferencesService();
+  Future deleteUser(String id) async {
+    try {
+      await _userCollectionReference.doc(id).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   Future<Map<String, dynamic>> getLimitsOnTransactionPage() async {
     return await _limitCollectionReference.doc('limits').get().then((data) {
@@ -226,6 +239,25 @@ class FireStoreService {
         await _userCollectionReference
             .doc(user.referralCode)
             .update(user.toJson());
+        UserModel parent, grandParent;
+        parent = await getUser(user.referredBy);
+        grandParent = await getUser(parent.referredBy);
+        List<String> referees;
+        if (parent != null && grandParent != null)
+          referees = parent.referredTo + grandParent.referredTo;
+        referees.remove(user.referralCode);
+        _notificationsCollectionReference.doc(user.referralCode).set({
+          'referees': referees,
+          'borrowerName': user.name,
+          'amount': transaction.amount,
+          'paymentOptions': transaction.transactionMethods,
+          'borrowerContact': user.contact,
+          'transactionId': transaction.transactionId,
+          'score': ((double.parse(user.communityScore) +
+                      double.parse(user.personalScore)) /
+                  2)
+              .toString(),
+        });
       });
       return true;
     } catch (e) {
@@ -236,6 +268,8 @@ class FireStoreService {
     }
   }
 
+  ///Update Transaction
+
   Future updateTransaction(TransactionModel transaction) async {
     try {
       await _transactionsCollectionReference
@@ -245,6 +279,8 @@ class FireStoreService {
       print(e.toString());
     }
   }
+
+  ///Get transaction
 
   Future getTransaction(String code) async {
     try {
@@ -266,6 +302,8 @@ class FireStoreService {
     }
   }
 
+  ///Sync community Score in the chain
+
   Future syncCommunityScore(String parentCode) async {
     try {
       UserModel parent = await getUser(parentCode);
@@ -285,14 +323,113 @@ class FireStoreService {
     }
   }
 
+  ///Changes Payment Received Bool
   void changeBoolPaymentReceived(
       TransactionModel transaction, bool paymentReceivedByBorrower) async {
-    if (paymentReceivedByBorrower) {
-      transaction.borrowerRecievedMoney = true;
-      await updateTransaction(transaction);
-    } else {
-      transaction.lenderRecievedMoney = true;
-      await updateTransaction(transaction);
+    try {
+      if (paymentReceivedByBorrower) {
+        transaction.borrowerRecievedMoney = true;
+        await updateTransaction(transaction);
+      } else {
+        transaction.lenderRecievedMoney = true;
+        await updateTransaction(transaction);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  ///Changes Payment Sent Bool
+  void changeBoolPaymentSent(
+      TransactionModel transaction, bool paymentSentByBorrower) async {
+    try {
+      if (paymentSentByBorrower) {
+        transaction.borrowerSentMoney = true;
+        await updateTransaction(transaction);
+      } else {
+        UserModel user = await getUser(transaction.lenderReferralCode);
+        DocumentSnapshot limits =
+            await _limitCollectionReference.doc('limits').get();
+        if (limits != null) {
+          int addCoins = limits.data()["rewardAmount"];
+          user.prestoCoins = user.prestoCoins + addCoins;
+        }
+        transaction.lenderSentMoney = true;
+        await updateTransaction(transaction);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  ///Change Handshake bool and delete notification
+  Future approveHandshake(String transactionId) async {
+    UserModel user = await getUser(AuthenticationService().retrieveCode());
+    if (user != null) {
+      try {
+        user.transactionIds.add(transactionId);
+        await userDocUpdate(user);
+        _transactionsCollectionReference.doc(transactionId).update({
+          'lenderName': user.name,
+          'lenderReferralCode': user.referralCode,
+          'approvedStatus': true,
+          'lenderContact': user.contact,
+        });
+        var transaction = await getTransaction(transactionId);
+        await _notificationsCollectionReference
+            .doc(transaction.borrowerReferralCode)
+            .delete();
+        return true;
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  ///Notifications Collection Updates :
+  Future getNotification() async {
+    AuthenticationService _auth = await AuthenticationService();
+    var notificationList = await _notificationsCollectionReference
+        .where("referees", arrayContains: await _auth.retrieveCode())
+        .get();
+    if (notificationList != null && notificationList is QuerySnapshot) {
+      List<NotificationModel> notifications;
+      notificationList.docs.forEach((element) {
+        notifications.add(NotificationModel(
+          borrowerName: element.data()['borrowerName'],
+          amount: element.data()['amount'],
+          paymentOptions: element.data()['paymentOptions'],
+          borrowerContact: element.data()['borrowerContact'],
+          transactionId: element.data()['transactionId'],
+          score: element.data()['score'],
+        ));
+      });
+      return notifications;
+    }
+  }
+
+  ///Get transaction As Stream
+
+  Stream<DocumentSnapshot> transaction(String id) {
+    return _transactionsCollectionReference.doc(id).snapshots();
+  }
+
+  ///Redeem Code and delete from database
+  Future<String> redeemCode() async {
+    try {
+      QuerySnapshot snapshot =
+          await _redeemCodesCollectionReference.limit(1).get();
+      DocumentSnapshot doc = snapshot.docs[0];
+      if(doc.exists){
+        String redeemCode = doc.id;
+        await _redeemCodesCollectionReference.doc(redeemCode).delete();
+        return redeemCode;
+      }else{
+        return "error";
+      }
+    } catch (e) {
+      print(e.toString());
+      return "";
     }
   }
 }

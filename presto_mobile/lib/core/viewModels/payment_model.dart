@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:presto_mobile/constants/route_names.dart';
 import 'package:presto_mobile/core/models/transaction_model.dart';
 import 'package:presto_mobile/core/models/user_model.dart';
 import 'package:presto_mobile/core/services/authentication_service.dart';
@@ -66,7 +67,6 @@ class PaymentModel extends BaseViewModel {
           .whenComplete(
         () async {
           print("hello Transaction initiated");
-          _navigationService.pop();
           // http.Response response = await http.post(
           //   "http://192.168.29.70:3000/firebase/notification/",
           //   headers: {"Content-Type": "application/json"},
@@ -82,6 +82,16 @@ class PaymentModel extends BaseViewModel {
           //         .toString(),
           //   ).toJson(),
           // );
+          _navigationService.navigateTo(
+            BufferViewRoute,
+            true,
+            arguments: transactionId,
+          );
+          _dialogService.showDialog(
+            title: "Request Sent!!",
+            description:
+                "Your Borrowing Request has been sent. Please Be patient for lender to accept request. Thank You.",
+          );
         },
       );
     } else if (_user == null) {
@@ -100,5 +110,10 @@ class PaymentModel extends BaseViewModel {
         description: "Please Select an Payment Option first !!",
       );
     setBusy(false);
+  }
+
+  void returnTap() {
+    _navigationService.navigateTo("HomeView", true);
+    _navigationService.pop();
   }
 }
