@@ -63,7 +63,7 @@ class _PassInputState extends State<PassInput> {
             hintText: widget.hintText ?? "",
             hintStyle: TextStyle(
               fontSize: 18,
-              color: Colors.grey[800],
+              color: Colors.grey,
             ),
             hintMaxLines: 1,
             suffixIcon: IconButton(
